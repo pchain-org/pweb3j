@@ -64,6 +64,10 @@ import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
+import org.web3j.protocol.core.methods.response.TdmGetEpoch;
+import org.web3j.protocol.core.methods.response.TdmRevealVote;
+import org.web3j.protocol.core.methods.response.TdmVoteNextEpoch;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 import org.web3j.protocol.rx.JsonRpc2_0Rx;
@@ -833,4 +837,62 @@ public class JsonRpc2_0Web3j implements Web3j {
             throw new RuntimeException("Failed to close web3j service", e);
         }
     }
+    
+    @Override
+    public Request<?, TdmVoteNextEpoch> tdmVoteNextEpoch(
+    		String from, 
+    		String voteHash, 
+    		String gasPrice) {
+    	
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, voteHash, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, voteHash);
+    	}
+    	
+    	return new Request<>(
+                "tdm_voteNextEpoch",
+                params,
+                web3jService,
+                TdmVoteNextEpoch.class);
+    }
+    
+    @Override
+	public Request<?, TdmRevealVote> tdmRevealVote(String from, String pubkey, String amount,
+    		String salt, String signature, String gasPrice) {
+    	
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, pubkey, amount, salt, signature, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, pubkey, amount, salt, signature);
+    	}
+    	
+    	return new Request<>(
+                "tdm_revealVote",
+                params,
+                web3jService,
+                TdmRevealVote.class);
+    }
+    
+    @Override
+    public Request<?, TdmGetCurrentEpochNumber> tdmGetCurrentEpochNumber() {
+    	return new Request<>(
+                "tdm_getCurrentEpochNumber",
+                Collections.<String>emptyList(),
+                web3jService,
+                TdmGetCurrentEpochNumber.class);
+    }
+    
+    @Override
+	public Request<?, TdmGetEpoch> tdmGetEpoch(int number) {
+		return new Request<>(
+                "tdm_getEpoch",
+                Arrays.asList(number),
+                web3jService,
+                TdmGetEpoch.class);
+	}
 }

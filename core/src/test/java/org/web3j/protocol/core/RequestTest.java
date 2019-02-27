@@ -621,4 +621,45 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"shh_getMessages\","
                 + "\"params\":[\"0x07\"],\"id\":1}");
     }
+    
+    @Test
+    public void testTdmGetCurrentEpochNumber() throws Exception {
+    	web3j.tdmGetCurrentEpochNumber().send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_getCurrentEpochNumber\","
+                + "\"params\":[],\"id\":1}");
+    }
+    
+    @Test
+    public void testTdmGetEpoch() throws Exception {
+    	web3j.tdmGetEpoch(0).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_getEpoch\","
+                + "\"params\":[0],\"id\":1}");
+    }
+    
+    @Test
+    public void testTdmVoteNextEpoch() throws Exception {
+    	web3j.tdmVoteNextEpoch(
+    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			"0xa394508546db4256283598119da9638fdb62655572722c6e2abea5f150512f2d",
+    			null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_voteNextEpoch\","
+                + "\"params\":[\"0xB3544059698177F14968D29A25AFD0D6D65F4534\",\"0xa394508546db4256283598119da9638fdb62655572722c6e2abea5f150512f2d\"],\"id\":1}");
+    }
+
+    @Test
+    public void testTdmRevealVote() throws Exception {
+    	web3j.tdmRevealVote(
+    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			"04A77BB50F7D3993CC6485CAABF8FE1980EDAAE88635A1FCB6EFE577D4C10166F0BA4D9C1AC53461FE3332292DDC8594C92E0E4D2C0CEEE0F74D8D67ACD8E391B1",
+    			"0x152D02C7E14AF6800000",
+    			"tlas",
+    			"0x6e5ea219800849592e67f76d45742a29c42a20b0b9d853facf32ac788591869e3db50a10770d88b93f24d2f6efed8acd220bce6442db7a2fbadfdada2d2cde73",
+    			null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_revealVote\","
+                + "\"params\":[\"0xB3544059698177F14968D29A25AFD0D6D65F4534\",\"04A77BB50F7D3993CC6485CAABF8FE1980EDAAE88635A1FCB6EFE577D4C10166F0BA4D9C1AC53461FE3332292DDC8594C92E0E4D2C0CEEE0F74D8D67ACD8E391B1\",\"0x152D02C7E14AF6800000\",\"tlas\",\"0x6e5ea219800849592e67f76d45742a29c42a20b0b9d853facf32ac788591869e3db50a10770d88b93f24d2f6efed8acd220bce6442db7a2fbadfdada2d2cde73\"],\"id\":1}");
+    }
 }

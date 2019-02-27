@@ -49,6 +49,10 @@ import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
+import org.web3j.protocol.core.methods.response.TdmGetEpoch;
+import org.web3j.protocol.core.methods.response.TdmRevealVote;
+import org.web3j.protocol.core.methods.response.TdmVoteNextEpoch;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.core.methods.response.Web3Sha3;
 
@@ -198,4 +202,13 @@ public interface Ethereum {
     Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId);
 
     Request<?, ShhMessages> shhGetMessages(BigInteger filterId);
+    
+    Request<?, TdmVoteNextEpoch> tdmVoteNextEpoch(String from, String voteHash, String gasPrice);
+    
+    Request<?, TdmRevealVote> tdmRevealVote(String from, String pubkey, String amount,
+    		String salt, String signature, String gasPrice);
+    
+    Request<?, TdmGetCurrentEpochNumber> tdmGetCurrentEpochNumber();
+    
+    Request<?, TdmGetEpoch> tdmGetEpoch(int number);
 }

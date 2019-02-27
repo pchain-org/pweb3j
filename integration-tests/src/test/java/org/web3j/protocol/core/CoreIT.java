@@ -43,6 +43,10 @@ import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
+import org.web3j.protocol.core.methods.response.TdmGetEpoch;
+import org.web3j.protocol.core.methods.response.TdmRevealVote;
+import org.web3j.protocol.core.methods.response.TdmVoteNextEpoch;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
@@ -76,7 +80,7 @@ public class CoreIT {
     public void testWeb3ClientVersion() throws Exception {
         Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
         String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-        System.out.println("Ethereum client version: " + clientVersion);
+        System.out.println("Pchain client version: " + clientVersion);
         assertFalse(clientVersion.isEmpty());
     }
 
@@ -547,5 +551,40 @@ public class CoreIT {
     @Test
     public void testShhGetMessages() throws Exception {
     
+    }
+    
+    @Test
+    public void testTdmGetCurrentEpochNumber() throws Exception {
+    	TdmGetCurrentEpochNumber tdmGetCurrentEpochNumber = web3j.tdmGetCurrentEpochNumber().send();
+        assertTrue(tdmGetCurrentEpochNumber.getCurrentEpochNumber() >= 0);
+    }
+    
+    @Test
+    public void testTdmGetEpoch() throws Exception {
+    	TdmGetEpoch tdmGetEpoch = web3j.tdmGetEpoch(0).send();
+        assertTrue(tdmGetEpoch.getEpoch().getNumber() == 0);
+    }
+    
+    @Test
+    public void testTdmVoteNextEpoch() throws Exception {
+    	TdmVoteNextEpoch tdmVoteNextEpoch = web3j.tdmVoteNextEpoch(
+    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			"0xa394508546db4256283598119da9638fdb62655572722c6e2abea5f150512f2d",
+    			null).send();
+    	
+    	assertFalse(tdmVoteNextEpoch.getHash().isEmpty());
+    }
+
+    @Test
+    public void testTdmRevealVote() throws Exception {
+    	TdmRevealVote tdmRevealVote = web3j.tdmRevealVote(
+    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			"04A77BB50F7D3993CC6485CAABF8FE1980EDAAE88635A1FCB6EFE577D4C10166F0BA4D9C1AC53461FE3332292DDC8594C92E0E4D2C0CEEE0F74D8D67ACD8E391B1",
+    			"0x152D02C7E14AF6800000",
+    			"tlas",
+    			"0x6e5ea219800849592e67f76d45742a29c42a20b0b9d853facf32ac788591869e3db50a10770d88b93f24d2f6efed8acd220bce6442db7a2fbadfdada2d2cde73",
+    			null).send();
+    	
+    	assertFalse(tdmRevealVote.getHash().isEmpty());
     }
 }
