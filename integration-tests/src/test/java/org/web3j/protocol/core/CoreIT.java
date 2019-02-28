@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.DelDelegate;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
@@ -43,8 +44,11 @@ import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TdmGeneratePrivateValidator;
 import org.web3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
 import org.web3j.protocol.core.methods.response.TdmGetEpoch;
+import org.web3j.protocol.core.methods.response.TdmGetNextEpochValidators;
+import org.web3j.protocol.core.methods.response.TdmGetNextEpochVote;
 import org.web3j.protocol.core.methods.response.TdmRevealVote;
 import org.web3j.protocol.core.methods.response.TdmVoteNextEpoch;
 import org.web3j.protocol.core.methods.response.Transaction;
@@ -586,5 +590,34 @@ public class CoreIT {
     			null).send();
     	
     	assertFalse(tdmRevealVote.getHash().isEmpty());
+    }
+    
+    @Test
+    public void testTdmGetNextEpochVote() throws Exception {
+    	TdmGetNextEpochVote tdmGetNextEpochVote = web3j.tdmGetNextEpochVote().send();
+    	
+    	assertTrue(tdmGetNextEpochVote.getVote() != null);
+    }
+    
+    @Test
+    public void testTdmGetNextEpochValidators() throws Exception {
+    	TdmGetNextEpochValidators tdmGetNextEpochValidators = web3j.tdmGetNextEpochValidators().send();
+    	
+    	assertTrue(tdmGetNextEpochValidators.getEpochValidators() != null);
+    }
+    
+    @Test
+    public void testTdmGeneratePrivateValidator() throws Exception {
+    	TdmGeneratePrivateValidator tdmGeneratePrivateValidator = 
+    			web3j.tdmGeneratePrivateValidator("0x1234567890123456789012345678901234567890").send();
+    	
+    	assertTrue(tdmGeneratePrivateValidator.getPrivateValidator().getConsensus_pub_key() != null);
+    }
+    
+    @Test
+    public void testDelDelegate() throws Exception {
+    	DelDelegate delDelegate = web3j.delDelegate("0x1529FA43D9F7FE958662F7200739CDC3EC2666C7","0xd833b6738285f4a50cf42cf1a40c4000256589d4", "0x3635c9adc5dea00000", null).send();
+    	
+    	assertFalse(delDelegate.getHash().isEmpty());
     }
 }

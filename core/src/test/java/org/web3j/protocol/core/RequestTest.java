@@ -662,4 +662,32 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_revealVote\","
                 + "\"params\":[\"0xB3544059698177F14968D29A25AFD0D6D65F4534\",\"04A77BB50F7D3993CC6485CAABF8FE1980EDAAE88635A1FCB6EFE577D4C10166F0BA4D9C1AC53461FE3332292DDC8594C92E0E4D2C0CEEE0F74D8D67ACD8E391B1\",\"0x152D02C7E14AF6800000\",\"tlas\",\"0x6e5ea219800849592e67f76d45742a29c42a20b0b9d853facf32ac788591869e3db50a10770d88b93f24d2f6efed8acd220bce6442db7a2fbadfdada2d2cde73\"],\"id\":1}");
     }
+    
+    @Test
+    public void testTdmGetNextEpochVote() throws Exception {
+    	web3j.tdmGetNextEpochVote().send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_getNextEpochVote\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testTdmGetNextEpochValidators() throws Exception {
+    	web3j.tdmGetNextEpochValidators().send();
+    	
+    	verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_getNextEpochValidators\",\"params\":[],\"id\":1}");
+    }
+
+    @Test
+    public void testTdmGeneratePrivateValidator() throws Exception {
+    	web3j.tdmGeneratePrivateValidator("0x1234567890123456789012345678901234567890").send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"tdm_generatePrivateValidator\",\"params\":[\"0x1234567890123456789012345678901234567890\"],\"id\":1}");
+    }
+
+    @Test
+    public void testDelDelegate() throws Exception {
+    	web3j.delDelegate("0x1529FA43D9F7FE958662F7200739CDC3EC2666C7","0xd833b6738285f4a50cf42cf1a40c4000256589d4", "0x3635c9adc5dea00000", null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"del_delegate\",\"params\":[\"0x1529FA43D9F7FE958662F7200739CDC3EC2666C7\",\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\",\"0x3635c9adc5dea00000\"],\"id\":1}");
+    }
 }

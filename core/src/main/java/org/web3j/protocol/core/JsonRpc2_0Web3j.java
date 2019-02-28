@@ -20,6 +20,7 @@ import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
 import org.web3j.protocol.core.methods.response.DbPutString;
+import org.web3j.protocol.core.methods.response.DelDelegate;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
@@ -64,8 +65,11 @@ import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TdmGeneratePrivateValidator;
 import org.web3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
 import org.web3j.protocol.core.methods.response.TdmGetEpoch;
+import org.web3j.protocol.core.methods.response.TdmGetNextEpochValidators;
+import org.web3j.protocol.core.methods.response.TdmGetNextEpochVote;
 import org.web3j.protocol.core.methods.response.TdmRevealVote;
 import org.web3j.protocol.core.methods.response.TdmVoteNextEpoch;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
@@ -895,4 +899,50 @@ public class JsonRpc2_0Web3j implements Web3j {
                 web3jService,
                 TdmGetEpoch.class);
 	}
+    
+    @Override
+    public Request<?, TdmGetNextEpochVote> tdmGetNextEpochVote() {
+    	return new Request<>(
+                "tdm_getNextEpochVote",
+                Collections.<String>emptyList(),
+                web3jService,
+                TdmGetNextEpochVote.class);
+    }
+    
+    @Override
+	public Request<?, TdmGetNextEpochValidators> tdmGetNextEpochValidators() {
+    	return new Request<>(
+                "tdm_getNextEpochValidators",
+                Collections.<String>emptyList(),
+                web3jService,
+                TdmGetNextEpochValidators.class);
+    }
+    
+    @Override
+	public Request<?, TdmGeneratePrivateValidator> tdmGeneratePrivateValidator(String address) {
+    	return new Request<>(
+                "tdm_generatePrivateValidator",
+                Arrays.asList(address),
+                web3jService,
+                TdmGeneratePrivateValidator.class);
+    }
+    
+    @Override
+	public Request<?, DelDelegate> delDelegate(String from, String candidate, 
+    		String amount, String gasPrice) {
+
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, candidate, amount, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, candidate, amount);
+    	}
+    	
+    	return new Request<>(
+                "del_delegate",
+                params,
+                web3jService,
+                DelDelegate.class);
+    }
 }

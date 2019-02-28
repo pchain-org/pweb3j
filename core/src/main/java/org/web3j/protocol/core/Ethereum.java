@@ -7,6 +7,7 @@ import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
 import org.web3j.protocol.core.methods.response.DbPutString;
+import org.web3j.protocol.core.methods.response.DelDelegate;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
@@ -49,8 +50,11 @@ import org.web3j.protocol.core.methods.response.ShhNewGroup;
 import org.web3j.protocol.core.methods.response.ShhNewIdentity;
 import org.web3j.protocol.core.methods.response.ShhUninstallFilter;
 import org.web3j.protocol.core.methods.response.ShhVersion;
+import org.web3j.protocol.core.methods.response.TdmGeneratePrivateValidator;
 import org.web3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
 import org.web3j.protocol.core.methods.response.TdmGetEpoch;
+import org.web3j.protocol.core.methods.response.TdmGetNextEpochValidators;
+import org.web3j.protocol.core.methods.response.TdmGetNextEpochVote;
 import org.web3j.protocol.core.methods.response.TdmRevealVote;
 import org.web3j.protocol.core.methods.response.TdmVoteNextEpoch;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
@@ -211,4 +215,13 @@ public interface Ethereum {
     Request<?, TdmGetCurrentEpochNumber> tdmGetCurrentEpochNumber();
     
     Request<?, TdmGetEpoch> tdmGetEpoch(int number);
+    
+    Request<?, TdmGetNextEpochVote> tdmGetNextEpochVote();
+    
+    Request<?, TdmGetNextEpochValidators> tdmGetNextEpochValidators();
+    
+    Request<?, TdmGeneratePrivateValidator> tdmGeneratePrivateValidator(String address);
+    
+    Request<?, DelDelegate> delDelegate(String from, String candidate, 
+    		String amount, String gasPrice);
 }
