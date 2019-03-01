@@ -3,10 +3,21 @@ package org.web3j.protocol.core;
 import java.math.BigInteger;
 
 import org.web3j.protocol.core.methods.request.ShhFilter;
+import org.web3j.protocol.core.methods.response.ChainCreateChildChain;
+import org.web3j.protocol.core.methods.response.ChainDepositInChildChain;
+import org.web3j.protocol.core.methods.response.ChainDepositInMainChain;
+import org.web3j.protocol.core.methods.response.ChainJoinChildChain;
+import org.web3j.protocol.core.methods.response.ChainSignAddress;
+import org.web3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
+import org.web3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
 import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
 import org.web3j.protocol.core.methods.response.DbPutString;
+import org.web3j.protocol.core.methods.response.DelApplyCandidate;
+import org.web3j.protocol.core.methods.response.DelCancelCandidate;
+import org.web3j.protocol.core.methods.response.DelCancelDelegate;
+import org.web3j.protocol.core.methods.response.DelCheckCandidate;
 import org.web3j.protocol.core.methods.response.DelDelegate;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -23,6 +34,7 @@ import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHas
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetFullBalance;
 import org.web3j.protocol.core.methods.response.EthGetStorageAt;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
@@ -207,6 +219,26 @@ public interface Ethereum {
 
     Request<?, ShhMessages> shhGetMessages(BigInteger filterId);
     
+    Request<?, ChainCreateChildChain> chainCreateChildChain(String from, String chainId,
+    		String minValidators, String minDepositAmount, String startBlock, String endBlock, 
+    		String gasPrice);
+    
+    Request<?, ChainJoinChildChain> chainJoinChildChain(String from, String pubkey,
+    		String chainId, String depositAmount, String signature, String gasPrice);
+    
+    Request<?, ChainDepositInMainChain> chainDepositInMainChain(String from, String chainId, 
+    		String amount, String gasPrice);
+    
+    Request<?, ChainDepositInChildChain> chainDepositInChildChain(String from, String txHash);
+    
+    Request<?, ChainWithdrawFromChildChain> chainWithdrawFromChildChain(String from, 
+    		String amount, String gasPrice);
+    
+    Request<?, ChainWithdrawFromMainChain> chainWithdrawFromMainChain(String from, 
+    		String amount, String chainId, String txHash);
+    
+    Request<?, ChainSignAddress> chainSignAddress(String from, String privateKey);
+    
     Request<?, TdmVoteNextEpoch> tdmVoteNextEpoch(String from, String voteHash, String gasPrice);
     
     Request<?, TdmRevealVote> tdmRevealVote(String from, String pubkey, String amount,
@@ -224,4 +256,17 @@ public interface Ethereum {
     
     Request<?, DelDelegate> delDelegate(String from, String candidate, 
     		String amount, String gasPrice);
+
+    Request<?, DelCancelDelegate> delCancelDelegate(String from, String candidate, 
+    		String amount, String gasPrice);
+    
+    Request<?, DelApplyCandidate> delApplyCandidate(String from, String securityDeposit, 
+    		int commission, String gasPrice);
+    
+    Request<?, DelCancelCandidate> delCancelCandidate(String from, String gasPrice);
+    
+    Request<?, DelCheckCandidate> delCheckCandidate(String from, DefaultBlockParameter blockNumber);
+    
+    Request<?, EthGetFullBalance> ethGetFullBalance(String from, 
+    		DefaultBlockParameter blockNumber, boolean fullDetail);
 }

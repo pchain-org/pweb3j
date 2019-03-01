@@ -16,10 +16,21 @@ import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.request.ShhPost;
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.ChainCreateChildChain;
+import org.web3j.protocol.core.methods.response.ChainDepositInChildChain;
+import org.web3j.protocol.core.methods.response.ChainDepositInMainChain;
+import org.web3j.protocol.core.methods.response.ChainJoinChildChain;
+import org.web3j.protocol.core.methods.response.ChainSignAddress;
+import org.web3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
+import org.web3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
 import org.web3j.protocol.core.methods.response.DbGetHex;
 import org.web3j.protocol.core.methods.response.DbGetString;
 import org.web3j.protocol.core.methods.response.DbPutHex;
 import org.web3j.protocol.core.methods.response.DbPutString;
+import org.web3j.protocol.core.methods.response.DelApplyCandidate;
+import org.web3j.protocol.core.methods.response.DelCancelCandidate;
+import org.web3j.protocol.core.methods.response.DelCancelDelegate;
+import org.web3j.protocol.core.methods.response.DelCheckCandidate;
 import org.web3j.protocol.core.methods.response.DelDelegate;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -36,6 +47,7 @@ import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHas
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetCompilers;
+import org.web3j.protocol.core.methods.response.EthGetFullBalance;
 import org.web3j.protocol.core.methods.response.EthGetStorageAt;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
@@ -843,6 +855,117 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
     
     @Override
+    public Request<?, ChainCreateChildChain> chainCreateChildChain(String from, String chainId,
+    		String minValidators, String minDepositAmount, String startBlock, String endBlock, 
+    		String gasPrice) {
+
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, chainId, minValidators, minDepositAmount, 
+    				startBlock, endBlock, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, chainId, minValidators, minDepositAmount, 
+    				startBlock, endBlock);
+    	}
+    	
+    	return new Request<>(
+                "chain_createChildChain",
+                params,
+                web3jService,
+                ChainCreateChildChain.class);
+    }
+    
+    @Override
+    public Request<?, ChainJoinChildChain> chainJoinChildChain(String from, String pubkey,
+    		String chainId, String depositAmount, String signature, String gasPrice) {
+    	
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, pubkey, chainId, depositAmount, 
+    				signature, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, pubkey, chainId, depositAmount, signature);
+    	}
+    	
+    	return new Request<>(
+                "chain_joinChildChain",
+                params,
+                web3jService,
+                ChainJoinChildChain.class);
+    }
+    
+    @Override
+    public Request<?, ChainDepositInMainChain> chainDepositInMainChain(String from, String chainId, 
+    		String amount, String gasPrice) {
+    	
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, chainId, amount, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, chainId, amount);
+    	}
+    	
+    	return new Request<>(
+                "chain_depositInMainChain",
+                params,
+                web3jService,
+                ChainDepositInMainChain.class);
+    }
+    
+    @Override
+    public Request<?, ChainDepositInChildChain> chainDepositInChildChain(String from, String txHash) {
+    	
+    	return new Request<>(
+                "chain_depositInChildChain",
+                Arrays.asList(from, txHash),
+                web3jService,
+                ChainDepositInChildChain.class);
+    }
+    
+    @Override
+    public Request<?, ChainWithdrawFromChildChain> chainWithdrawFromChildChain(String from, 
+    		String amount, String gasPrice) {
+    	
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, amount, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, amount);
+    	}
+    	
+    	return new Request<>(
+                "chain_withdrawFromChildChain",
+                params,
+                web3jService,
+                ChainWithdrawFromChildChain.class);
+    }
+    
+    @Override
+    public Request<?, ChainWithdrawFromMainChain> chainWithdrawFromMainChain(String from, 
+    		String amount, String chainId, String txHash) {
+    	
+    	return new Request<>(
+                "chain_withdrawFromMainChain",
+                Arrays.asList(from, amount, chainId, txHash),
+                web3jService,
+                ChainWithdrawFromMainChain.class);
+    }
+    
+    @Override
+    public Request<?, ChainSignAddress> chainSignAddress(String from, String privateKey) {
+    	
+    	return new Request<>(
+                "chain_signAddress",
+                Arrays.asList(from, privateKey),
+                web3jService,
+                ChainSignAddress.class);
+    }
+    
+    @Override
     public Request<?, TdmVoteNextEpoch> tdmVoteNextEpoch(
     		String from, 
     		String voteHash, 
@@ -944,5 +1067,82 @@ public class JsonRpc2_0Web3j implements Web3j {
                 params,
                 web3jService,
                 DelDelegate.class);
+    }
+
+    @Override
+    public Request<?, DelCancelDelegate> delCancelDelegate(String from, String candidate, 
+    		String amount, String gasPrice) {
+    	
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, candidate, amount, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, candidate, amount);
+    	}
+    	
+    	return new Request<>(
+                "del_cancelDelegate",
+                params,
+                web3jService,
+                DelCancelDelegate.class);
+    }
+    
+    @Override
+    public Request<?, DelApplyCandidate> delApplyCandidate(String from, String securityDeposit, 
+    		int commission, String gasPrice) {
+    	
+    	List<? extends Object> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, securityDeposit, commission, gasPrice);
+    	} else {
+    		params = Arrays.asList(from, securityDeposit, commission);
+    	}
+    	
+    	return new Request<>(
+                "del_applyCandidate",
+                params,
+                web3jService,
+                DelApplyCandidate.class);
+    }
+    
+    @Override
+    public Request<?, DelCancelCandidate> delCancelCandidate(String from, String gasPrice) {
+
+    	List<String> params = null;
+    	
+    	if (gasPrice != null && !gasPrice.isEmpty()) {
+    		params = Arrays.asList(from, gasPrice);
+    	} else {
+    		params = Arrays.asList(from);
+    	}
+    	
+    	return new Request<>(
+                "del_cancelCandidate",
+                params,
+                web3jService,
+                DelCancelCandidate.class);
+    }
+    
+    @Override
+    public Request<?, DelCheckCandidate> delCheckCandidate(String from, DefaultBlockParameter blockNumber) {
+
+    	return new Request<>(
+                "del_checkCandidate",
+                Arrays.asList(from, blockNumber.getValue()),
+                web3jService,
+                DelCheckCandidate.class);
+    }
+    
+    @Override
+    public Request<?, EthGetFullBalance> ethGetFullBalance(String from, 
+    		DefaultBlockParameter blockNumber, boolean fullDetail) {
+    	
+    	return new Request<>(
+                "eth_getFullBalance",
+                Arrays.asList(from, blockNumber.getValue(), fullDetail),
+                web3jService,
+                EthGetFullBalance.class);
     }
 }

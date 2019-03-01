@@ -621,7 +621,92 @@ public class RequestTest extends RequestTester {
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"shh_getMessages\","
                 + "\"params\":[\"0x07\"],\"id\":1}");
     }
+
+    @Test
+    public void testChainCreateChildChain() throws Exception {
+    	web3j.chainCreateChildChain("0xa349d8a4e35f0c922377168daae653b5c9f1d370",
+    	    	"pchain-child-8", "0x1", "0x152D02C7E14AF6800000", "0x32","0x7D0", null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_createChildChain\","
+                + "\"params\":[\"0xa349d8a4e35f0c922377168daae653b5c9f1d370\",\"pchain-child-8\","
+                + "\"0x1\",\"0x152D02C7E14AF6800000\",\"0x32\",\"0x7D0\"],\"id\":1}");
+    }
     
+    @Test
+    public void testChainJoinChildChain() throws Exception {
+    	web3j.chainJoinChildChain("0x5CE010Bf008Ba976Dd80Ed968a2f916190Cf9b4f",
+    			  "5CCB45F727A7075C9336DF357A3610DD884FD97E64FFB51EED30890B8B3519E36D1C211A7BC1335C09CE654779328F1D01D997C1B2C5F9D196AD67FA5AF7A00273CED363C50D8F12B4EA096AFB859D6311C63C910752D41C0532C2D2654DCA863F7D56B2B9C33E0E7A5A0349F6B4FC20AE15526C5463F11D76FA92AB183ECEBE",
+    			   "pchain-child-8",
+    			   "0x152D02C7E14AF6800000",
+    			   "0x6e5ea219800849592e67f76d45742a29c42a20b0b9d853facf32ac788591869e3db50a10770d88b93f24d2f6efed8acd220bce6442db7a2fbadfdada2d2cde73",
+    			   null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_joinChildChain\","
+                + "\"params\":[\"0x5CE010Bf008Ba976Dd80Ed968a2f916190Cf9b4f\"," + 
+                "\"5CCB45F727A7075C9336DF357A3610DD884FD97E64FFB51EED30890B8B3519E36D1C211A7BC1335C09CE654779328F1D01D997C1B2C5F9D196AD67FA5AF7A00273CED363C50D8F12B4EA096AFB859D6311C63C910752D41C0532C2D2654DCA863F7D56B2B9C33E0E7A5A0349F6B4FC20AE15526C5463F11D76FA92AB183ECEBE\"," + 
+                "\"pchain-child-8\"," + 
+                "\"0x152D02C7E14AF6800000\"," + 
+                "\"0x6e5ea219800849592e67f76d45742a29c42a20b0b9d853facf32ac788591869e3db50a10770d88b93f24d2f6efed8acd220bce6442db7a2fbadfdada2d2cde73\"],\"id\":1}");
+    }
+
+    @Test
+    public void testChainDepositInMainChain() throws Exception {
+    	web3j.chainDepositInMainChain("0xB3544059698177F14968D29A25AFD0D6D65F4534", 
+    			"pchain_child_0", 
+    			"0xA968163F0A57B4000000", 
+    			"0x5208").send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_depositInMainChain\","
+                + "\"params\":[\"0xB3544059698177F14968D29A25AFD0D6D65F4534\",\"pchain_child_0\","
+                + "\"0xA968163F0A57B4000000\",\"0x5208\"],\"id\":1}");
+    }
+    
+    @Test
+    public void testChainDepositInChildChain() throws Exception {
+    	web3j.chainDepositInChildChain("0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			   "0x31d6fe38869272a821ac7a2b3b00aba9cb486f02cc570895f8f5d2dea8f7b5dc").send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_depositInChildChain\","
+                + "\"params\":[\"0xB3544059698177F14968D29A25AFD0D6D65F4534\","
+                + "\"0x31d6fe38869272a821ac7a2b3b00aba9cb486f02cc570895f8f5d2dea8f7b5dc\"],\"id\":1}");
+    }
+    
+    @Test
+    public void testChainWithdrawFromChildChain() throws Exception {
+    	web3j.chainWithdrawFromChildChain("0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			   "0x3F870857A3E0E3800000", null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_withdrawFromChildChain\","
+                + "\"params\":[\"0xB3544059698177F14968D29A25AFD0D6D65F4534\","
+                + "\"0x3F870857A3E0E3800000\"],\"id\":1}");
+    }
+
+    @Test
+    public void testChainWithdrawFromMainChain() throws Exception {
+    	web3j.chainWithdrawFromMainChain(
+    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			"0x3F870857A3E0E3800000",
+    			"pchain_child_0",
+    			"0x6ff2ac4bb53ef7907bef3219eb3f2684b66df8a22048a80270960f9671ed0007").send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_withdrawFromMainChain\","
+                + "\"params\":[\"0xB3544059698177F14968D29A25AFD0D6D65F4534\","
+                + "\"0x3F870857A3E0E3800000\","
+                + "\"pchain_child_0\"," 
+                + "\"0x6ff2ac4bb53ef7907bef3219eb3f2684b66df8a22048a80270960f9671ed0007\"],\"id\":1}");
+    }
+    
+    @Test
+    public void testChainSignAddress() throws Exception {
+    	web3j.chainSignAddress(
+    			"0xFD6AA07FF92907886B10B8E8863DDF8BA1902109",
+    			"0xA1BCB0033FC989D34026EED71AE6C57004CF1FBDC520ABF112B13FF7C03B62C6").send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_signAddress\","
+                + "\"params\":[\"0xFD6AA07FF92907886B10B8E8863DDF8BA1902109\","
+                + "\"0xA1BCB0033FC989D34026EED71AE6C57004CF1FBDC520ABF112B13FF7C03B62C6\"],\"id\":1}");
+    }
+
     @Test
     public void testTdmGetCurrentEpochNumber() throws Exception {
     	web3j.tdmGetCurrentEpochNumber().send();
@@ -690,4 +775,40 @@ public class RequestTest extends RequestTester {
     	
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"del_delegate\",\"params\":[\"0x1529FA43D9F7FE958662F7200739CDC3EC2666C7\",\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\",\"0x3635c9adc5dea00000\"],\"id\":1}");
     }
+    
+    @Test
+    public void testDelCancelDelegate() throws Exception {
+    	web3j.delCancelDelegate("0x1529FA43D9F7FE958662F7200739CDC3EC2666C7","0xd833b6738285f4a50cf42cf1a40c4000256589d4", "0x3635c9adc5dea00000", null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"del_cancelDelegate\",\"params\":[\"0x1529FA43D9F7FE958662F7200739CDC3EC2666C7\",\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\",\"0x3635c9adc5dea00000\"],\"id\":1}");
+    }
+    
+    @Test
+    public void testDelApplyCandidate() throws Exception {
+    	web3j.delApplyCandidate("0xd833b6738285f4a50cf42cf1a40c4000256589d4","0x21e19e0c9bab2400000", 10, null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"del_applyCandidate\",\"params\":[\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\",\"0x21e19e0c9bab2400000\",10],\"id\":1}");
+    }
+
+    @Test
+    public void testDelCancelCandidate() throws Exception {
+    	web3j.delCancelCandidate("0xd833b6738285f4a50cf42cf1a40c4000256589d4",null).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"del_cancelCandidate\",\"params\":[\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\"],\"id\":1}");
+    }
+
+    @Test
+    public void testDelCheckCandidate() throws Exception {
+    	web3j.delCheckCandidate("0xd833b6738285f4a50cf42cf1a40c4000256589d4",DefaultBlockParameterName.LATEST).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"del_checkCandidate\",\"params\":[\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\",\"latest\"],\"id\":1}");
+    }
+
+    @Test
+    public void testEthGetFullBalance() throws Exception {
+    	web3j.ethGetFullBalance("0xd833b6738285f4a50cf42cf1a40c4000256589d4",DefaultBlockParameterName.LATEST, true).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getFullBalance\",\"params\":[\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\",\"latest\",true],\"id\":1}");
+    }
+
 }
