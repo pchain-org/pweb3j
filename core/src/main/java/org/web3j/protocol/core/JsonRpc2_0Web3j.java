@@ -19,7 +19,10 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.ChainCreateChildChain;
 import org.web3j.protocol.core.methods.response.ChainDepositInChildChain;
 import org.web3j.protocol.core.methods.response.ChainDepositInMainChain;
+import org.web3j.protocol.core.methods.response.ChainGetAllChains;
+import org.web3j.protocol.core.methods.response.ChainGetBlockReward;
 import org.web3j.protocol.core.methods.response.ChainJoinChildChain;
+import org.web3j.protocol.core.methods.response.ChainSetBlockReward;
 import org.web3j.protocol.core.methods.response.ChainSignAddress;
 import org.web3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
 import org.web3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
@@ -965,6 +968,36 @@ public class JsonRpc2_0Web3j implements Web3j {
                 ChainSignAddress.class);
     }
     
+    @Override
+    public Request<?, ChainSetBlockReward> chainSetBlockReward(String from, String reward) {
+    	
+    	return new Request<>(
+                "chain_setBlockReward",
+                Arrays.asList(from, reward),
+                web3jService,
+                ChainSetBlockReward.class);
+    }
+    
+    @Override
+    public Request<?, ChainGetBlockReward> chainGetBlockReward(DefaultBlockParameter blockNumber) {
+    	
+    	return new Request<>(
+                "chain_getBlockReward",
+                Arrays.asList(blockNumber),
+                web3jService,
+                ChainGetBlockReward.class);
+    }
+    
+    @Override
+    public Request<?, ChainGetAllChains> chainGetAllChains() {
+    	
+    	return new Request<>(
+                "chain_getAllChains",
+                Collections.<String>emptyList(),
+                web3jService,
+                ChainGetAllChains.class);
+    }
+	
     @Override
     public Request<?, TdmVoteNextEpoch> tdmVoteNextEpoch(
     		String from, 

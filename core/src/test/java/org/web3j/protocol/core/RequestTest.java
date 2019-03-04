@@ -708,6 +708,31 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testChainSetBlockReward() throws Exception {
+    	web3j.chainSetBlockReward(
+    			"0xFD6AA07FF92907886B10B8E8863DDF8BA1902109","0x10").send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_setBlockReward\","
+                + "\"params\":[\"0xFD6AA07FF92907886B10B8E8863DDF8BA1902109\",\"0x10\"],\"id\":1}");
+    }
+
+    @Test
+    public void testChainGetBlockReward() throws Exception {
+    	web3j.chainGetBlockReward(new DefaultBlockParameterNumber(6)).send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_getBlockReward\","
+                + "\"params\":[\"0x6\"],\"id\":1}");
+    }
+
+    @Test
+    public void testChainGetAllChains() throws Exception {
+    	web3j.chainGetAllChains().send();
+    	
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"chain_getAllChains\","
+                + "\"params\":[],\"id\":1}");
+    }
+
+    @Test
     public void testTdmGetCurrentEpochNumber() throws Exception {
     	web3j.tdmGetCurrentEpochNumber().send();
     	

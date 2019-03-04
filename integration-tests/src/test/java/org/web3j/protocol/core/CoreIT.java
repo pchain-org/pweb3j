@@ -11,7 +11,10 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.ChainCreateChildChain;
 import org.web3j.protocol.core.methods.response.ChainDepositInChildChain;
 import org.web3j.protocol.core.methods.response.ChainDepositInMainChain;
+import org.web3j.protocol.core.methods.response.ChainGetAllChains;
+import org.web3j.protocol.core.methods.response.ChainGetBlockReward;
 import org.web3j.protocol.core.methods.response.ChainJoinChildChain;
+import org.web3j.protocol.core.methods.response.ChainSetBlockReward;
 import org.web3j.protocol.core.methods.response.ChainSignAddress;
 import org.web3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
 import org.web3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
@@ -637,6 +640,29 @@ public class CoreIT {
     			"0xA1BCB0033FC989D34026EED71AE6C57004CF1FBDC520ABF112B13FF7C03B62C6").send();
     	
     	assertFalse(chainSignAddress.getDATA().isEmpty());
+    }
+
+    @Test
+    public void testChainSetBlockReward() throws Exception {
+    	ChainSetBlockReward chainSetBlockReward = web3j.chainSetBlockReward(
+    			"0xFD6AA07FF92907886B10B8E8863DDF8BA1902109","0x10").send();
+    	
+    	assertFalse(chainSetBlockReward.getHash().isEmpty());
+    }
+
+    @Test
+    public void testChainGetBlockReward() throws Exception {
+    	ChainGetBlockReward chainGetBlockReward = web3j.chainGetBlockReward(
+    			new DefaultBlockParameterNumber(6)).send();
+    	
+    	assertTrue(chainGetBlockReward.getReward().intValue() >= 0);
+    }
+
+    @Test
+    public void testChainGetAllChains() throws Exception {
+    	ChainGetAllChains chainGetAllChains = web3j.chainGetAllChains().send();
+    	
+    	assertTrue(chainGetAllChains.getChains().size() >= 0);
     }
     
     @Test

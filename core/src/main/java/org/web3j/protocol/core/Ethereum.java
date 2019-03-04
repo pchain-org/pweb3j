@@ -6,7 +6,10 @@ import org.web3j.protocol.core.methods.request.ShhFilter;
 import org.web3j.protocol.core.methods.response.ChainCreateChildChain;
 import org.web3j.protocol.core.methods.response.ChainDepositInChildChain;
 import org.web3j.protocol.core.methods.response.ChainDepositInMainChain;
+import org.web3j.protocol.core.methods.response.ChainGetAllChains;
+import org.web3j.protocol.core.methods.response.ChainGetBlockReward;
 import org.web3j.protocol.core.methods.response.ChainJoinChildChain;
+import org.web3j.protocol.core.methods.response.ChainSetBlockReward;
 import org.web3j.protocol.core.methods.response.ChainSignAddress;
 import org.web3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
 import org.web3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
@@ -238,6 +241,12 @@ public interface Ethereum {
     		String amount, String chainId, String txHash);
     
     Request<?, ChainSignAddress> chainSignAddress(String from, String privateKey);
+    
+    Request<?, ChainSetBlockReward> chainSetBlockReward(String from, String reward);
+    
+    Request<?, ChainGetBlockReward> chainGetBlockReward(DefaultBlockParameter blockNumber);
+    
+    Request<?, ChainGetAllChains> chainGetAllChains();
     
     Request<?, TdmVoteNextEpoch> tdmVoteNextEpoch(String from, String voteHash, String gasPrice);
     
