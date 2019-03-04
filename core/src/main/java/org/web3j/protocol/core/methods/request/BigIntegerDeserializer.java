@@ -27,7 +27,7 @@ public class BigIntegerDeserializer extends JsonDeserializer<BigInteger> {
 			try {
 				if (Numeric.containsHexPrefix(value)) {
 					return new BigInteger(value.substring(2), 16);
-				} else if (value.contains("e+")) {
+				} else if (value.contains("e") || value.contains("E")) {
 					return new BigDecimal(value).toBigInteger();
 				} else {
 					return new BigInteger(value);
