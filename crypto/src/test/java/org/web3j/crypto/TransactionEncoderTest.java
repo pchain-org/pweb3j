@@ -18,19 +18,19 @@ public class TransactionEncoderTest {
     @Test
     public void testSignMessage() {
         byte[] signedMessage = TransactionEncoder.signMessage(
-                createEtherTransaction(), SampleKeys.CREDENTIALS);
+                createEtherTransaction(), ChainId.MAINNET_STR, SampleKeys.CREDENTIALS);
         String hexMessage = Numeric.toHexString(signedMessage);
         assertThat(hexMessage,
-                is("0xf85580010a840add5355887fffffffffffffff80"
-                        + "1c"
-                        + "a046360b50498ddf5566551ce1ce69c46c565f1f478bb0ee680caf31fbc08ab727"
-                        + "a01b2f1432de16d110407d544f519fc91b84c8e16d3b6ec899592d486a94974cd0"));
+                is("0xf87580010a840add5355887fffffffffffffff80"
+                		+ "a06ad51b06ee7e3e3cd86ef37774b179dbd37ceecd6e38400fa884d8260c5d9c45"
+                		+ "a0f01f0acf3c0094eae7c8f57181354781e0d693fb3e606f74af275516223f1e99"
+                		+ "a05da5e251e788ec9c77c29730703e677545284c8b293185ca85fbfa2465a6e4ed"));
     }
 
     @Test
     public void testEtherTransactionAsRlpValues() {
         List<RlpType> rlpStrings = TransactionEncoder.asRlpValues(createEtherTransaction(),
-                new Sign.SignatureData((byte) 0, new byte[32], new byte[32]));
+                new Sign.SignatureData(new byte[32], new byte[32], new byte[32]));
         assertThat(rlpStrings.size(), is(9));
         assertThat(rlpStrings.get(3), equalTo(RlpString.create(new BigInteger("add5355", 16))));
     }
@@ -45,7 +45,7 @@ public class TransactionEncoderTest {
 
     @Test
     public void testEip155Encode() {
-        assertThat(TransactionEncoder.encode(createEip155RawTransaction(), (byte) 1),
+        assertThat(TransactionEncoder.encode(createEip155RawTransaction(), BigInteger.valueOf(1)),
                 is(Numeric.hexStringToByteArray(
                         "0xec098504a817c800825208943535353535353535353535353535353535353535880de0"
                                 + "b6b3a764000080018080")));
@@ -58,7 +58,7 @@ public class TransactionEncoderTest {
                 "0x4646464646464646464646464646464646464646464646464646464646464646");
 
         assertThat(TransactionEncoder.signMessage(
-                createEip155RawTransaction(), (byte) 1, credentials),
+                createEip155RawTransaction(), BigInteger.valueOf(1), credentials),
                 is(Numeric.hexStringToByteArray(
                         "0xf86c098504a817c800825208943535353535353535353535353535353535353535880"
                                 + "de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d"

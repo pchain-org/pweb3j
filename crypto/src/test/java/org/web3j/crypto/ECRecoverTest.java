@@ -28,13 +28,13 @@ public class ECRecoverTest {
         byte[] msgHash = Hash.sha3((prefix + message).getBytes());
 
         byte[] signatureBytes = Numeric.hexStringToByteArray(signature);
-        byte v = signatureBytes[64];
-        if (v < 27) { 
-            v += 27; 
+        byte v64 = signatureBytes[64];
+        if (v64 < 27) { 
+            v64 += 27; 
         }
            
         SignatureData sd = new SignatureData(
-                v, 
+                Numeric.toBytesPadded(BigInteger.valueOf(v0), 32), 
                 (byte[]) Arrays.copyOfRange(signatureBytes, 0, 32), 
                 (byte[]) Arrays.copyOfRange(signatureBytes, 32, 64));
 

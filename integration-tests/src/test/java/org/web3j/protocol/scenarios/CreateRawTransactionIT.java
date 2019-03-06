@@ -10,6 +10,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.ChainId;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
@@ -28,7 +29,7 @@ public class CreateRawTransactionIT extends Scenario {
         RawTransaction rawTransaction = createEtherTransaction(
                 nonce, BOB.getAddress());
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ChainId.MAINNET_STR, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -48,7 +49,7 @@ public class CreateRawTransactionIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ChainId.MAINNET_STR, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =

@@ -261,11 +261,12 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
          */
         enum Network {
             olympic(0),
-            mainnet(ChainId.MAINNET),
-            morden(ChainId.EXPANSE_MAINNET),
-            ropsten(ChainId.ROPSTEN),
-            rinkeby(ChainId.RINKEBY),
-            kovan(ChainId.KOVAN);
+            mainnet(1),
+            testnet(2);
+            //morden(ChainId.EXPANSE_MAINNET),
+            //ropsten(ChainId.ROPSTEN),
+            //rinkeby(ChainId.RINKEBY),
+            //kovan(ChainId.KOVAN);
 
             public final long id;
 

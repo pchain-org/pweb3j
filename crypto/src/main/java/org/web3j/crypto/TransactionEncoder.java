@@ -1,5 +1,6 @@
 package org.web3j.crypto;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ import org.web3j.utils.Numeric;
  */
 public class TransactionEncoder {
 
+	//all transactions must belong to one chain/chainid
+	/*
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
         Sign.SignatureData signatureData = Sign.signMessage(
@@ -23,9 +26,19 @@ public class TransactionEncoder {
 
         return encode(rawTransaction, signatureData);
     }
+    */
 
     public static byte[] signMessage(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            RawTransaction rawTransaction, String chainId, Credentials credentials) {
+    	
+    	BigInteger biChainId = chainIdToBigInteger(chainId);
+    	
+        return signMessage(rawTransaction, biChainId, credentials);
+    }
+    
+    public static byte[] signMessage(
+            RawTransaction rawTransaction, BigInteger chainId, Credentials credentials) {
+    	
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
@@ -35,20 +48,40 @@ public class TransactionEncoder {
     }
 
     public static Sign.SignatureData createEip155SignatureData(
-            Sign.SignatureData signatureData, byte chainId) {
-        byte v = (byte) (signatureData.getV() + (chainId << 1) + 8);
+            Sign.SignatureData signatureData, BigInteger chainId) {
+    	
+    	
+		BigInteger biV = new BigInteger(signatureData.getV());
+		biV = biV.add(BigInteger.valueOf(8));
+		biV = biV.add(chainId.multiply(BigInteger.valueOf(2)));
+		
+		String abc = Numeric.toHexString(biV.toByteArray());
 
         return new Sign.SignatureData(
-                v, signatureData.getR(), signatureData.getS());
+                biV.toByteArray(), signatureData.getR(), signatureData.getS());
     }
 
     public static byte[] encode(RawTransaction rawTransaction) {
-        return encode(rawTransaction, null);
+        return encode(rawTransaction, (Sign.SignatureData)null);
     }
 
-    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+    public static byte[] encode(RawTransaction rawTransaction, String chainId) {
+    	
+    	BigInteger biChainId = chainIdToBigInteger(chainId);
+    	
+        return encode(rawTransaction, biChainId);
+    }
+
+    public static byte[] encode(RawTransaction rawTransaction, BigInteger chainId) {
+    	
+    	byte[] v = new byte[] {};
+    	
+    	if (chainId != null) {
+    		v = Numeric.toBytesPadded(chainId, 32);
+    	}
+    	
         Sign.SignatureData signatureData = new Sign.SignatureData(
-                chainId, new byte[] {}, new byte[] {});
+        		v, new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
     }
 
@@ -83,11 +116,18 @@ public class TransactionEncoder {
         result.add(RlpString.create(data));
 
         if (signatureData != null) {
-            result.add(RlpString.create(signatureData.getV()));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getV())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }
 
         return result;
+    }
+    
+    public static BigInteger chainIdToBigInteger(String chainId) {
+    	
+    	byte[] byChainId = org.web3j.crypto.Hash.sha3(chainId.getBytes());
+		String chainIdHash = Numeric.toHexString(byChainId);
+		return Numeric.decodeQuantity(chainIdHash);
     }
 }

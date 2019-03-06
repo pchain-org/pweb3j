@@ -27,6 +27,7 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.ChainId;
 import org.web3j.utils.Numeric;
 
 import static junit.framework.TestCase.assertFalse;
@@ -164,7 +165,7 @@ public class HumanStandardTokenIT extends Scenario {
                 BigInteger.ZERO,
                 getHumanStandardTokenBinary() + encodedConstructor);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ChainId.MAINNET_STR, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
@@ -285,7 +286,7 @@ public class HumanStandardTokenIT extends Scenario {
                 contractAddress,
                 encodedFunction);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ChainId.MAINNET_STR, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)

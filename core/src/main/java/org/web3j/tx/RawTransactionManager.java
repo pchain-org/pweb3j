@@ -29,11 +29,12 @@ public class RawTransactionManager extends TransactionManager {
     private final Web3j web3j;
     final Credentials credentials;
 
-    private final byte chainId;
+    private final BigInteger chainId;
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
-    public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
+    
+    public RawTransactionManager(Web3j web3j, Credentials credentials, BigInteger chainId) {
         super(web3j, credentials.getAddress());
 
         this.web3j = web3j;
@@ -42,10 +43,31 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
+    public RawTransactionManager(Web3j web3j, Credentials credentials, String chainId) {
+        this(web3j, credentials, TransactionEncoder.chainIdToBigInteger(chainId));
+    }
+    
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId,
+            Web3j web3j, Credentials credentials, BigInteger chainId,
             TransactionReceiptProcessor transactionReceiptProcessor) {
-        super(transactionReceiptProcessor, credentials.getAddress());
+    	super(transactionReceiptProcessor, credentials.getAddress());
+    	
+    	this.web3j = web3j;
+        this.credentials = credentials;
+
+        this.chainId = chainId;
+    }
+
+    public RawTransactionManager(
+            Web3j web3j, Credentials credentials, String chainId,
+            TransactionReceiptProcessor transactionReceiptProcessor) {
+    	
+        this(web3j, credentials, TransactionEncoder.chainIdToBigInteger(chainId));
+    }
+    
+    public RawTransactionManager(
+            Web3j web3j, Credentials credentials, BigInteger chainId, int attempts, long sleepDuration) {
+        super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
         this.credentials = credentials;
@@ -54,13 +76,8 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
-        super(web3j, attempts, sleepDuration, credentials.getAddress());
-
-        this.web3j = web3j;
-        this.credentials = credentials;
-
-        this.chainId = chainId;
+            Web3j web3j, Credentials credentials, String chainId, int attempts, long sleepDuration) {
+        this(web3j, credentials, TransactionEncoder.chainIdToBigInteger(chainId), attempts, sleepDuration);
     }
 
     public RawTransactionManager(Web3j web3j, Credentials credentials) {
@@ -113,10 +130,10 @@ public class RawTransactionManager extends TransactionManager {
 
         byte[] signedMessage;
 
-        if (chainId > ChainId.NONE) {
+        if (chainId.compareTo(ChainId.NONE) > 0) {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
-            signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+            signedMessage = TransactionEncoder.signMessage(rawTransaction, ChainId.MAINNET_STR, credentials);
         }
 
         return Numeric.toHexString(signedMessage);
