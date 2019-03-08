@@ -9,6 +9,7 @@ import java.util.Collections;
 import org.junit.Test;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
@@ -18,24 +19,25 @@ import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 
 public class DelegationFunctionIT extends Scenario {
-
+	
+	final String DefaultSelfSecurityDeposit = "10000000000000000000000"; // 10,000 * e18
+	final String MinimumDelegationAmount    = "1000000000000000000000";  // 1000 * e18
 
 	@Test
     public void testDelDelegate() throws Exception {
 
 		String from = ALICE.getAddress();
 		String candidate = ALICE.getAddress();
-		BigInteger amount = new BigInteger("10000000000000000000000");
+		BigInteger amount = new BigInteger(MinimumDelegationAmount); //1000*1.0e+18
 		String chainId = MultiChainUtil.mainChainId;
 
 		//ABIPack(pabi.Delegate.String(), candidate)
 		Function function = new Function(
                 "Delegate", 
-                Arrays.asList(new Utf8String(candidate)),
+                Arrays.asList(new Address(candidate)),
                 Collections.<TypeReference<?>>emptyList()
                 );
 		
@@ -49,8 +51,7 @@ public class DelegationFunctionIT extends Scenario {
 	    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, ALICE);
 	    String hexValue = Numeric.toHexString(signedMessage);
 
-	    HttpService hs = new HttpService(MultiChainUtil.node + chainId);
-		Web3j web3j = Web3j.build(hs);
+	    Web3j web3j = MultiChainUtil.BuildWeb3j(chainId);
 			
 	    EthSendTransaction ethSendTransaction =
 	                web3j.ethSendRawTransaction(hexValue).sendAsync().get();
@@ -71,13 +72,13 @@ public class DelegationFunctionIT extends Scenario {
 
 		String from = ALICE.getAddress();
 		String candidate = ALICE.getAddress();
-		BigInteger amount = new BigInteger("10000000000000000000000");
+		BigInteger amount = new BigInteger(MinimumDelegationAmount); //1000*1.0e+18
 		String chainId = MultiChainUtil.mainChainId;
 
 		//ABIPack(pabi.CancelDelegate.String(), candidate, (*big.Int)(amount))
 		Function function = new Function(
                 "CancelDelegate", 
-                Arrays.asList(new Utf8String(candidate), new Uint(amount)),
+                Arrays.asList(new Address(candidate), new Uint(amount)),
                 Collections.<TypeReference<?>>emptyList()
                 );
 		
@@ -90,8 +91,7 @@ public class DelegationFunctionIT extends Scenario {
 	    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, ALICE);
 	    String hexValue = Numeric.toHexString(signedMessage);
 
-	    HttpService hs = new HttpService(MultiChainUtil.node + chainId);
-		Web3j web3j = Web3j.build(hs);
+	    Web3j web3j = MultiChainUtil.BuildWeb3j(chainId);
 			
 	    EthSendTransaction ethSendTransaction =
 	                web3j.ethSendRawTransaction(hexValue).sendAsync().get();
@@ -111,13 +111,13 @@ public class DelegationFunctionIT extends Scenario {
     public void testDelApplyCandidate() throws Exception {
 
 		String from = ALICE.getAddress();
-		BigInteger securityDeposit = new BigInteger("10000000000000000000000");
+		BigInteger securityDeposit = new BigInteger(DefaultSelfSecurityDeposit);
 		int commission = 10;
 		String chainId = MultiChainUtil.mainChainId;
 
 		//ABIPack(pabi.Candidate.String(), commission)
 		Function function = new Function(
-                "ApplyCandidate", 
+                "Candidate", 
                 Arrays.asList(new Uint8(commission)),
                 Collections.<TypeReference<?>>emptyList()
                 );
@@ -132,8 +132,7 @@ public class DelegationFunctionIT extends Scenario {
 	    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, ALICE);
 	    String hexValue = Numeric.toHexString(signedMessage);
 
-	    HttpService hs = new HttpService(MultiChainUtil.node + chainId);
-		Web3j web3j = Web3j.build(hs);
+	    Web3j web3j = MultiChainUtil.BuildWeb3j(chainId);
 
 	    EthSendTransaction ethSendTransaction =
 	                web3j.ethSendRawTransaction(hexValue).sendAsync().get();
@@ -171,8 +170,7 @@ public class DelegationFunctionIT extends Scenario {
 	    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, ALICE);
 	    String hexValue = Numeric.toHexString(signedMessage);
 
-	    HttpService hs = new HttpService(MultiChainUtil.node + chainId);
-		Web3j web3j = Web3j.build(hs);
+	    Web3j web3j = MultiChainUtil.BuildWeb3j(chainId);
 
 	    EthSendTransaction ethSendTransaction =
 	                web3j.ethSendRawTransaction(hexValue).sendAsync().get();
@@ -187,4 +185,5 @@ public class DelegationFunctionIT extends Scenario {
 
 	    assertFalse(transactionReceipt.toString().isEmpty());
 	}
+
 }

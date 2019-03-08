@@ -636,10 +636,10 @@ public class CoreIT {
     @Test
     public void testChainSignAddress() throws Exception {
     	ChainSignAddress chainSignAddress = web3j.chainSignAddress(
-    			"0xFD6AA07FF92907886B10B8E8863DDF8BA1902109",
-    			"0xA1BCB0033FC989D34026EED71AE6C57004CF1FBDC520ABF112B13FF7C03B62C6").send();
+    			"0x54A1E8C1F8941B4D88865BE69D4180C6466271B4",
+    			"0x14BCEEA31D3ABC5DF66410EDDBA6F66B13CD90D7FA079B352263821F81BB8C81").send();
     	
-    	assertFalse(chainSignAddress.getDATA().isEmpty());
+    	assertTrue(chainSignAddress.getDATA() == "0x8189a1f9432649ef8708e76e00448168e177667ba16a68ae4650b1b3eab0ea4d154c58ccb4f422422a7db37911d90164271d4e8dd18683dde60286bed4adede1");
     }
 
     @Test

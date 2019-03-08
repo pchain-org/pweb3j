@@ -24,7 +24,7 @@ public class MultiChainUtil {
 	protected static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
     
     public static String mainChainId = "pchain";
-	public static String child0Id = "child-0";
+	public static String child0Id = "child_100";
 
 	protected static String node = "http://localhost:6969/";
 	private static final int SLEEP_DURATION = 2000;
@@ -37,6 +37,12 @@ public class MultiChainUtil {
 	
 	protected static String GetNode() {
 		return MultiChainUtil.node;
+	}
+	
+	protected static Web3j BuildWeb3j(String chainId) {
+		
+		HttpService hs = new HttpService(MultiChainUtil.node + chainId);
+		return Web3j.build(hs);
 	}
 
 	protected static String Version() {
