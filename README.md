@@ -5,6 +5,16 @@ This repository is evloved from web3j https://github.com/web3j/web3j, with chang
 
 All pchain specific RPC APIs are listed in https://github.com/pchain-org/pchain/wiki/JSON-RPC
 
+# maven
+
+java 8
+
+    <dependency>
+      <groupId>io.github.pchain-org</groupId>
+      <artifactId>core</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+
 # sending requests
 
 For pchain is multi-chain structure, so the request should be sent to specific chain. And it just needs to add chain name after the http://host:port/. The following examples are using main chain - "pchain".
