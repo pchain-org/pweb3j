@@ -13,3 +13,4 @@ geth
 parity
 integration-tests
 pantheon
+pweb3j-spring-boot-starter
