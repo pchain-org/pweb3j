@@ -1,0 +1,15 @@
+The order is used for mvn compile&deploy. and the all pom.xml files are just used for compile&deploy. not support 'test' yet.
+
+utils
+abi
+tuples
+rlp
+crypto
+core
+codegen
+infura
+console
+geth
+parity
+integration-tests
+pantheon
