@@ -12,7 +12,7 @@ java 8
     <dependency>
       <groupId>io.github.pchain-org</groupId>
       <artifactId>core</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
     </dependency>
 
 # sending requests
