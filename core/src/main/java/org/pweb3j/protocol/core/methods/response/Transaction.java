@@ -1,8 +1,8 @@
 package org.pweb3j.protocol.core.methods.response;
 
-import java.math.BigInteger;
-
 import org.pweb3j.utils.Numeric;
+
+import java.math.BigInteger;
 
 /**
  * Transaction object used by both {@link EthTransaction} and {@link EthBlock}.
@@ -27,7 +27,7 @@ public class Transaction {
     private String raw;
     private String r;
     private String s;
-    private long v;  // see https://github.com/web3j/web3j/issues/44
+    private String v;  // see https://github.com/web3j/web3j/issues/44
 
     public Transaction() {
     }
@@ -35,7 +35,7 @@ public class Transaction {
     public Transaction(String hash, String nonce, String blockHash, String blockNumber,
                        String transactionIndex, String from, String to, String value,
                        String gas, String gasPrice, String input, String creates,
-                       String publicKey, String raw, String r, String s, long v) {
+                       String publicKey, String raw, String r, String s, String v) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -207,16 +207,16 @@ public class Transaction {
         this.s = s;
     }
 
-    public long getV() {
+    public String getV() {
         return v;
     }
 
-    public Long getChainId() {
-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
-            return null;
-        }
-        Long chainId = (v - CHAIN_ID_INC) / 2;
-        return chainId;
+    public String getChainId() {
+//        if (Numeric.toBigInt(v) == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
+//            return null;
+//        }
+//        Long chainId = (Numeric.toBigInt(v) - CHAIN_ID_INC) / 2;
+        return v;
     }
 
     // public void setV(byte v) {
@@ -226,14 +226,15 @@ public class Transaction {
     // Workaround until Geth & Parity return consistent values. At present
     // Parity returns a byte value, Geth returns a hex-encoded string
     // https://github.com/ethereum/go-ethereum/issues/3339
-    public void setV(Object v) {
-        if (v instanceof String) {
-            this.v = Numeric.toBigInt((String) v).longValueExact();
-        } else if (v instanceof Integer) {
-            this.v = ((Integer) v).longValue();
-        } else {
-            this.v = (Long) v;
-        }
+    public void setV(String v) {
+        this.v =  v;
+//        if (v instanceof String) {
+////            this.v = Numeric.toBigInt((String) v).longValueExact();
+//        } else if (v instanceof Integer) {
+////            this.v = ((Integer) v).longValue();
+//        } else {
+//            this.v = (Long) v;
+//        }
     }
 
     @Override
@@ -328,7 +329,7 @@ public class Transaction {
         result = 31 * result + (getRaw() != null ? getRaw().hashCode() : 0);
         result = 31 * result + (getR() != null ? getR().hashCode() : 0);
         result = 31 * result + (getS() != null ? getS().hashCode() : 0);
-        result = 31 * result + BigInteger.valueOf(getV()).hashCode();
+        result = 31 * result + (getV() != null ? getV().hashCode() : 0);
         return result;
     }
 }

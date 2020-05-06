@@ -1,21 +1,20 @@
 package org.pweb3j.protocol.core.methods.response;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import org.pweb3j.protocol.ObjectMapperFactory;
 import org.pweb3j.protocol.core.Response;
 import org.pweb3j.utils.Numeric;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Block object returned by:
@@ -505,7 +504,7 @@ public class EthBlock extends Response<EthBlock.Block> {
         public TransactionObject(String hash, String nonce, String blockHash, String blockNumber,
                                  String transactionIndex, String from, String to, String value,
                                  String gasPrice, String gas, String input, String creates,
-                                 String publicKey, String raw, String r, String s, int v) {
+                                 String publicKey, String raw, String r, String s, String v) {
             super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value,
                     gasPrice, gas, input, creates, publicKey, raw, r, s, v);
         }
