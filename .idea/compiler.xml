@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="codegen" />
+        <module name="console" />
+        <module name="geth" />
+        <module name="parity" />
+        <module name="infura" />
+        <module name="abi" />
+        <module name="integration-tests" />
+        <module name="crypto" />
+        <module name="core" />
+        <module name="utils" />
+        <module name="rlp" />
+        <module name="pweb3j-spring-boot-starter" />
+        <module name="pantheon" />
+        <module name="tuples" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="abi" target="1.8" />
+      <module name="codegen" target="1.8" />
+      <module name="console" target="1.8" />
+      <module name="core" target="1.8" />
+      <module name="crypto" target="1.8" />
+      <module name="geth" target="1.8" />
+      <module name="infura" target="1.8" />
+      <module name="integration-tests" target="1.8" />
+      <module name="pantheon" target="1.8" />
+      <module name="parity" target="1.8" />
+      <module name="pweb3j-spring-boot-starter" target="1.8" />
+      <module name="rlp" target="1.8" />
+      <module name="tuples" target="1.8" />
+      <module name="utils" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
