@@ -1,12 +1,15 @@
 package org.pweb3j.protocol.core.methods.request;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.util.List;
 
 public class ChainStatus {
 
 	String chain_id;
 	String owner;
-	int current_epoch;
+	@JsonDeserialize(using = IntegerDeserializer.class)
+	Integer current_epoch;
 	String epoch_start_time;
 	List<ChainValidator> validators;
 	

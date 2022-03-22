@@ -830,6 +830,13 @@ public class RequestTest extends RequestTester {
     }
 
     @Test
+    public void testDelExtractReward() throws Exception {
+        web3j.delExtractReward("0xd833b6738285f4a50cf42cf1a40c4000256589d4",null).send();
+
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"del_extractReward\",\"params\":[\"0xd833b6738285f4a50cf42cf1a40c4000256589d4\"],\"id\":1}");
+    }
+
+    @Test
     public void testEthGetFullBalance() throws Exception {
     	web3j.ethGetFullBalance("0xd833b6738285f4a50cf42cf1a40c4000256589d4",DefaultBlockParameterName.LATEST, true).send();
     	

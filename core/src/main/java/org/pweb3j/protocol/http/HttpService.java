@@ -75,7 +75,8 @@ public class HttpService extends Service {
             = MediaType.parse("application/json; charset=utf-8");
 
     //public static final String DEFAULT_URL = "http://localhost:8545/";
-    public static final String DEFAULT_URL = "http://1.nos.pchain.live:6969/pchain";
+    //public static final String DEFAULT_URL = "http://1.nos.pchain.live:6969/pchain";
+    public static final String DEFAULT_URL = "http://localhost:6969/pchain";
     
 
     private static final Logger log = LoggerFactory.getLogger(HttpService.class);

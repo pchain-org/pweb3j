@@ -3,77 +3,7 @@ package org.pweb3j.protocol.core;
 import java.math.BigInteger;
 
 import org.pweb3j.protocol.core.methods.request.ShhFilter;
-import org.pweb3j.protocol.core.methods.response.ChainCreateChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainDepositInChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainDepositInMainChain;
-import org.pweb3j.protocol.core.methods.response.ChainGetAllChains;
-import org.pweb3j.protocol.core.methods.response.ChainGetBlockReward;
-import org.pweb3j.protocol.core.methods.response.ChainJoinChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainSetBlockReward;
-import org.pweb3j.protocol.core.methods.response.ChainSignAddress;
-import org.pweb3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
-import org.pweb3j.protocol.core.methods.response.DbGetHex;
-import org.pweb3j.protocol.core.methods.response.DbGetString;
-import org.pweb3j.protocol.core.methods.response.DbPutHex;
-import org.pweb3j.protocol.core.methods.response.DbPutString;
-import org.pweb3j.protocol.core.methods.response.DelApplyCandidate;
-import org.pweb3j.protocol.core.methods.response.DelCancelCandidate;
-import org.pweb3j.protocol.core.methods.response.DelCancelDelegate;
-import org.pweb3j.protocol.core.methods.response.DelCheckCandidate;
-import org.pweb3j.protocol.core.methods.response.DelDelegate;
-import org.pweb3j.protocol.core.methods.response.EthAccounts;
-import org.pweb3j.protocol.core.methods.response.EthBlock;
-import org.pweb3j.protocol.core.methods.response.EthBlockNumber;
-import org.pweb3j.protocol.core.methods.response.EthCoinbase;
-import org.pweb3j.protocol.core.methods.response.EthCompileLLL;
-import org.pweb3j.protocol.core.methods.response.EthCompileSerpent;
-import org.pweb3j.protocol.core.methods.response.EthCompileSolidity;
-import org.pweb3j.protocol.core.methods.response.EthEstimateGas;
-import org.pweb3j.protocol.core.methods.response.EthFilter;
-import org.pweb3j.protocol.core.methods.response.EthGasPrice;
-import org.pweb3j.protocol.core.methods.response.EthGetBalance;
-import org.pweb3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
-import org.pweb3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
-import org.pweb3j.protocol.core.methods.response.EthGetCode;
-import org.pweb3j.protocol.core.methods.response.EthGetCompilers;
-import org.pweb3j.protocol.core.methods.response.EthGetFullBalance;
-import org.pweb3j.protocol.core.methods.response.EthGetStorageAt;
-import org.pweb3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.pweb3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.pweb3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
-import org.pweb3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
-import org.pweb3j.protocol.core.methods.response.EthGetWork;
-import org.pweb3j.protocol.core.methods.response.EthHashrate;
-import org.pweb3j.protocol.core.methods.response.EthLog;
-import org.pweb3j.protocol.core.methods.response.EthMining;
-import org.pweb3j.protocol.core.methods.response.EthProtocolVersion;
-import org.pweb3j.protocol.core.methods.response.EthSign;
-import org.pweb3j.protocol.core.methods.response.EthSubmitHashrate;
-import org.pweb3j.protocol.core.methods.response.EthSubmitWork;
-import org.pweb3j.protocol.core.methods.response.EthSyncing;
-import org.pweb3j.protocol.core.methods.response.EthTransaction;
-import org.pweb3j.protocol.core.methods.response.EthUninstallFilter;
-import org.pweb3j.protocol.core.methods.response.NetListening;
-import org.pweb3j.protocol.core.methods.response.NetPeerCount;
-import org.pweb3j.protocol.core.methods.response.NetVersion;
-import org.pweb3j.protocol.core.methods.response.ShhAddToGroup;
-import org.pweb3j.protocol.core.methods.response.ShhHasIdentity;
-import org.pweb3j.protocol.core.methods.response.ShhMessages;
-import org.pweb3j.protocol.core.methods.response.ShhNewFilter;
-import org.pweb3j.protocol.core.methods.response.ShhNewGroup;
-import org.pweb3j.protocol.core.methods.response.ShhNewIdentity;
-import org.pweb3j.protocol.core.methods.response.ShhUninstallFilter;
-import org.pweb3j.protocol.core.methods.response.ShhVersion;
-import org.pweb3j.protocol.core.methods.response.TdmGeneratePrivateValidator;
-import org.pweb3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
-import org.pweb3j.protocol.core.methods.response.TdmGetEpoch;
-import org.pweb3j.protocol.core.methods.response.TdmGetNextEpochValidators;
-import org.pweb3j.protocol.core.methods.response.TdmGetNextEpochVote;
-import org.pweb3j.protocol.core.methods.response.TdmRevealVote;
-import org.pweb3j.protocol.core.methods.response.TdmVoteNextEpoch;
-import org.pweb3j.protocol.core.methods.response.Web3ClientVersion;
-import org.pweb3j.protocol.core.methods.response.Web3Sha3;
+import org.pweb3j.protocol.core.methods.response.*;
 
 /**
  * Core Ethereum JSON-RPC API.
@@ -193,6 +123,11 @@ public interface Ethereum {
 
     Request<?, EthSubmitHashrate> ethSubmitHashrate(String hashrate, String clientId);
 
+    Request<?, EthGetFullBalance> ethGetFullBalance(String from,
+                                                    DefaultBlockParameter blockNumber, boolean fullDetail);
+
+    Request<?, EthChainId> ethChainId();
+
     Request<?, DbPutString> dbPutString(String databaseName, String keyName, String stringToStore);
 
     Request<?, DbGetString> dbGetString(String databaseName, String keyName);
@@ -256,13 +191,19 @@ public interface Ethereum {
     Request<?, TdmGetCurrentEpochNumber> tdmGetCurrentEpochNumber();
     
     Request<?, TdmGetEpoch> tdmGetEpoch(int number);
+
+    Request<?, TdmGetCurrentEpochNumber> tdmGetCurrentEpochNumberOfChildChain(String chainId);
+
+    Request<?, TdmGetEpoch> tdmGetEpochOfChildChain(String chainId, int number);
     
     Request<?, TdmGetNextEpochVote> tdmGetNextEpochVote();
     
     Request<?, TdmGetNextEpochValidators> tdmGetNextEpochValidators();
     
     Request<?, TdmGeneratePrivateValidator> tdmGeneratePrivateValidator(String address);
-    
+
+    Request<?, TdmPeers> tdmPeers();
+
     Request<?, DelDelegate> delDelegate(String from, String candidate, 
     		String amount, String gasPrice);
 
@@ -275,7 +216,6 @@ public interface Ethereum {
     Request<?, DelCancelCandidate> delCancelCandidate(String from, String gasPrice);
     
     Request<?, DelCheckCandidate> delCheckCandidate(String from, DefaultBlockParameter blockNumber);
-    
-    Request<?, EthGetFullBalance> ethGetFullBalance(String from, 
-    		DefaultBlockParameter blockNumber, boolean fullDetail);
+
+    Request<?, DelExtractReward> delExtractReward(String from, String gasPrice);
 }

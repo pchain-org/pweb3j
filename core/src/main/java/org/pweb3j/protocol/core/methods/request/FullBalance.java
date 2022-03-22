@@ -22,6 +22,7 @@ public class FullBalance {
 	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger total_rewardBalance;
 	Map<String, ProxiedDetail> proxied_detail;
+	@JsonDeserialize(contentUsing = BigIntegerDeserializer.class)
 	Map<String, BigInteger> reward_detail;
 	
 	public BigInteger getBalance() {
