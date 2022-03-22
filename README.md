@@ -3,7 +3,7 @@ Pchain java API
 
 This repository is evloved from web3j https://github.com/web3j/web3j, with changing package name from 'org.web3j' to 'org.pweb3j', and rewrite related classes/functions to adapt to pchain.
 
-All pchain specific RPC APIs are listed in https://github.com/pchain-org/pchain/wiki/JSON-RPC
+All pchain specific RPC APIs are listed in https://pliangroup.gitbook.io/plian/using-the-blockchain/advanced-features/json-rpc
 
 # maven
 

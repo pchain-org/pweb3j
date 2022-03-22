@@ -8,68 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import org.pweb3j.protocol.Web3j;
-import org.pweb3j.protocol.core.methods.response.ChainCreateChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainDepositInChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainDepositInMainChain;
-import org.pweb3j.protocol.core.methods.response.ChainGetAllChains;
-import org.pweb3j.protocol.core.methods.response.ChainGetBlockReward;
-import org.pweb3j.protocol.core.methods.response.ChainJoinChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainSetBlockReward;
-import org.pweb3j.protocol.core.methods.response.ChainSignAddress;
-import org.pweb3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
-import org.pweb3j.protocol.core.methods.response.DelApplyCandidate;
-import org.pweb3j.protocol.core.methods.response.DelCancelCandidate;
-import org.pweb3j.protocol.core.methods.response.DelCancelDelegate;
-import org.pweb3j.protocol.core.methods.response.DelCheckCandidate;
-import org.pweb3j.protocol.core.methods.response.DelDelegate;
-import org.pweb3j.protocol.core.methods.response.EthAccounts;
-import org.pweb3j.protocol.core.methods.response.EthBlock;
-import org.pweb3j.protocol.core.methods.response.EthBlockNumber;
-import org.pweb3j.protocol.core.methods.response.EthCall;
-import org.pweb3j.protocol.core.methods.response.EthCoinbase;
-import org.pweb3j.protocol.core.methods.response.EthCompileLLL;
-import org.pweb3j.protocol.core.methods.response.EthCompileSerpent;
-import org.pweb3j.protocol.core.methods.response.EthCompileSolidity;
-import org.pweb3j.protocol.core.methods.response.EthEstimateGas;
-import org.pweb3j.protocol.core.methods.response.EthFilter;
-import org.pweb3j.protocol.core.methods.response.EthGasPrice;
-import org.pweb3j.protocol.core.methods.response.EthGetBalance;
-import org.pweb3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
-import org.pweb3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
-import org.pweb3j.protocol.core.methods.response.EthGetCode;
-import org.pweb3j.protocol.core.methods.response.EthGetCompilers;
-import org.pweb3j.protocol.core.methods.response.EthGetFullBalance;
-import org.pweb3j.protocol.core.methods.response.EthGetStorageAt;
-import org.pweb3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.pweb3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.pweb3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
-import org.pweb3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
-import org.pweb3j.protocol.core.methods.response.EthHashrate;
-import org.pweb3j.protocol.core.methods.response.EthLog;
-import org.pweb3j.protocol.core.methods.response.EthMining;
-import org.pweb3j.protocol.core.methods.response.EthProtocolVersion;
-import org.pweb3j.protocol.core.methods.response.EthSendTransaction;
-import org.pweb3j.protocol.core.methods.response.EthSyncing;
-import org.pweb3j.protocol.core.methods.response.EthTransaction;
-import org.pweb3j.protocol.core.methods.response.EthUninstallFilter;
-import org.pweb3j.protocol.core.methods.response.NetListening;
-import org.pweb3j.protocol.core.methods.response.NetPeerCount;
-import org.pweb3j.protocol.core.methods.response.NetVersion;
-import org.pweb3j.protocol.core.methods.response.ShhNewGroup;
-import org.pweb3j.protocol.core.methods.response.ShhNewIdentity;
-import org.pweb3j.protocol.core.methods.response.ShhVersion;
-import org.pweb3j.protocol.core.methods.response.TdmGeneratePrivateValidator;
-import org.pweb3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
-import org.pweb3j.protocol.core.methods.response.TdmGetEpoch;
-import org.pweb3j.protocol.core.methods.response.TdmGetNextEpochValidators;
-import org.pweb3j.protocol.core.methods.response.TdmGetNextEpochVote;
-import org.pweb3j.protocol.core.methods.response.TdmRevealVote;
-import org.pweb3j.protocol.core.methods.response.TdmVoteNextEpoch;
-import org.pweb3j.protocol.core.methods.response.Transaction;
-import org.pweb3j.protocol.core.methods.response.TransactionReceipt;
-import org.pweb3j.protocol.core.methods.response.Web3ClientVersion;
-import org.pweb3j.protocol.core.methods.response.Web3Sha3;
+import org.pweb3j.protocol.core.methods.response.*;
 import org.pweb3j.protocol.http.HttpService;
 
 import static junit.framework.TestCase.assertFalse;
@@ -197,7 +136,7 @@ public class CoreIT {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                 config.validAccount(),
                 DefaultBlockParameter.valueOf("latest")).send();
-        assertTrue(ethGetTransactionCount.getTransactionCount().signum() == 1);
+        assertTrue(ethGetTransactionCount.getTransactionCount().signum() >= 0);
     }
 
     @Test
@@ -417,7 +356,7 @@ public class CoreIT {
     @Test
     public void testEthCompileSerpent() throws Exception {
         EthCompileSerpent ethCompileSerpent = web3j.ethCompileSerpent(
-                "/* some serpent */").send();
+                "some serpent").send();
         assertFalse(ethCompileSerpent.getCompiledSourceCode().isEmpty());
     }
 
@@ -493,6 +432,20 @@ public class CoreIT {
     @Test
     public void testEthSubmitHashrate() throws Exception {
     
+    }
+
+    @Test
+    public void testEthGetFullBalance() throws Exception {
+    	EthGetFullBalance ethGetFullBalance = web3j.ethGetFullBalance(config.validAccount(),DefaultBlockParameterName.LATEST, true).send();
+
+    	assertTrue(ethGetFullBalance.getFullBalance().getBalance().compareTo(BigInteger.ZERO) >= 0);
+    }
+
+    @Test
+    public void testEthChainId() throws Exception {
+        EthChainId ethChainIde = web3j.ethChainId().send();
+
+    	assertTrue(ethChainIde.getChainId().compareTo(BigInteger.ZERO) >= 0);
     }
 
     @Test
@@ -574,17 +527,17 @@ public class CoreIT {
     
     @Test
     public void testChainCreateChildChain() throws Exception {
-    	ChainCreateChildChain chainCreateChildChain = web3j.chainCreateChildChain("0xa349d8a4e35f0c922377168daae653b5c9f1d370",
-    	    	"pchain-child-8", "0x1", "0x152D02C7E14AF6800000", "0x32","0x7D0", null).send();
+    	ChainCreateChildChain chainCreateChildChain = web3j.chainCreateChildChain(config.validAccount(),
+    	    	config.childChain(), "0x1", "0x152D02C7E14AF6800000", "0x32","0x7D0", null).send();
     	
     	assertFalse(chainCreateChildChain.getHash().isEmpty());
     }
     
     @Test
     public void testChainJoinChildChain() throws Exception {
-    	ChainJoinChildChain chainJoinChildChain = web3j.chainJoinChildChain("0x5CE010Bf008Ba976Dd80Ed968a2f916190Cf9b4f",
+    	ChainJoinChildChain chainJoinChildChain = web3j.chainJoinChildChain(config.validAccount(),
     			  "5CCB45F727A7075C9336DF357A3610DD884FD97E64FFB51EED30890B8B3519E36D1C211A7BC1335C09CE654779328F1D01D997C1B2C5F9D196AD67FA5AF7A00273CED363C50D8F12B4EA096AFB859D6311C63C910752D41C0532C2D2654DCA863F7D56B2B9C33E0E7A5A0349F6B4FC20AE15526C5463F11D76FA92AB183ECEBE",
-    			   "pchain-child-8",
+    			   config.childChain(),
     			   "0x152D02C7E14AF6800000",
     			   "0x6e5ea219800849592e67f76d45742a29c42a20b0b9d853facf32ac788591869e3db50a10770d88b93f24d2f6efed8acd220bce6442db7a2fbadfdada2d2cde73",
     			   null).send();
@@ -595,7 +548,7 @@ public class CoreIT {
     @Test
     public void testChainDepositInMainChain() throws Exception {
     	ChainDepositInMainChain chainDepositInMainChain = web3j.chainDepositInMainChain(
-    			"0xB3544059698177F14968D29A25AFD0D6D65F4534", 
+                config.validAccount(),
     			"pchain_child_0", 
     			"0xA968163F0A57B4000000", 
     			"0x5208").send();
@@ -606,7 +559,7 @@ public class CoreIT {
     @Test
     public void testChainDepositInChildChain() throws Exception {
     	ChainDepositInChildChain chainDepositInChildChain = web3j.chainDepositInChildChain(
-    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			config.validAccount(),
     			"0x31d6fe38869272a821ac7a2b3b00aba9cb486f02cc570895f8f5d2dea8f7b5dc").send();
     	
     	assertFalse(chainDepositInChildChain.getHash().isEmpty());
@@ -615,7 +568,7 @@ public class CoreIT {
     @Test
     public void testChainWithdrawFromChildChain() throws Exception {
     	ChainWithdrawFromChildChain chainWithdrawFromChildChain = web3j.chainWithdrawFromChildChain(
-    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			config.validAccount(),
  			   "0x3F870857A3E0E3800000", null).send();
     	
     	assertFalse(chainWithdrawFromChildChain.getHash().isEmpty());
@@ -625,7 +578,7 @@ public class CoreIT {
     @Test
     public void testChainWithdrawFromMainChain() throws Exception {
     	ChainWithdrawFromMainChain chainWithdrawFromMainChain = web3j.chainWithdrawFromMainChain(
-    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+                config.validAccount(),
     			"0x3F870857A3E0E3800000",
     			"pchain_child_0",
     			"0x6ff2ac4bb53ef7907bef3219eb3f2684b66df8a22048a80270960f9671ed0007").send();
@@ -639,13 +592,13 @@ public class CoreIT {
     			"0x54A1E8C1F8941B4D88865BE69D4180C6466271B4",
     			"0x14BCEEA31D3ABC5DF66410EDDBA6F66B13CD90D7FA079B352263821F81BB8C81").send();
     	
-    	assertTrue(chainSignAddress.getDATA() == "0x8189a1f9432649ef8708e76e00448168e177667ba16a68ae4650b1b3eab0ea4d154c58ccb4f422422a7db37911d90164271d4e8dd18683dde60286bed4adede1");
+    	assertTrue(chainSignAddress.getDATA().equals("0x8189a1f9432649ef8708e76e00448168e177667ba16a68ae4650b1b3eab0ea4d154c58ccb4f422422a7db37911d90164271d4e8dd18683dde60286bed4adede1"));
     }
 
     @Test
     public void testChainSetBlockReward() throws Exception {
     	ChainSetBlockReward chainSetBlockReward = web3j.chainSetBlockReward(
-    			"0xFD6AA07FF92907886B10B8E8863DDF8BA1902109","0x10").send();
+    			config.validAccount(),"0x10").send();
     	
     	assertFalse(chainSetBlockReward.getHash().isEmpty());
     }
@@ -664,7 +617,7 @@ public class CoreIT {
     	
     	assertTrue(chainGetAllChains.getChains().size() >= 0);
     }
-    
+
     @Test
     public void testTdmGetCurrentEpochNumber() throws Exception {
     	TdmGetCurrentEpochNumber tdmGetCurrentEpochNumber = web3j.tdmGetCurrentEpochNumber().send();
@@ -676,7 +629,19 @@ public class CoreIT {
     	TdmGetEpoch tdmGetEpoch = web3j.tdmGetEpoch(0).send();
         assertTrue(tdmGetEpoch.getEpoch().getNumber() == 0);
     }
-    
+
+    @Test
+    public void testTdmGetCurrentEpochNumberOfChildChain() throws Exception {
+    	TdmGetCurrentEpochNumber tdmGetCurrentEpochNumber = web3j.tdmGetCurrentEpochNumberOfChildChain(config.childChain()).send();
+        assertTrue(tdmGetCurrentEpochNumber.getCurrentEpochNumber() >= 0);
+    }
+
+    @Test
+    public void testTdmGetEpochOfChildChain() throws Exception {
+    	TdmGetEpoch tdmGetEpoch = web3j.tdmGetEpochOfChildChain(config.childChain(), 0).send();
+        assertTrue(tdmGetEpoch.getEpoch().getNumber() == 0);
+    }
+
     @Test
     public void testTdmVoteNextEpoch() throws Exception {
     	TdmVoteNextEpoch tdmVoteNextEpoch = web3j.tdmVoteNextEpoch(
@@ -690,7 +655,7 @@ public class CoreIT {
     @Test
     public void testTdmRevealVote() throws Exception {
     	TdmRevealVote tdmRevealVote = web3j.tdmRevealVote(
-    			"0xB3544059698177F14968D29A25AFD0D6D65F4534",
+    			config.validAccount(),
     			"04A77BB50F7D3993CC6485CAABF8FE1980EDAAE88635A1FCB6EFE577D4C10166F0BA4D9C1AC53461FE3332292DDC8594C92E0E4D2C0CEEE0F74D8D67ACD8E391B1",
     			"0x152D02C7E14AF6800000",
     			"tlas",
@@ -721,47 +686,52 @@ public class CoreIT {
     	
     	assertTrue(tdmGeneratePrivateValidator.getPrivateValidator().getConsensus_pub_key() != null);
     }
-    
+
+    @Test
+    public void testTdmPeers() throws Exception {
+        TdmPeers tdmPeers = web3j.tdmPeers().send();
+        assertTrue(tdmPeers.getPeers().size() != 0);
+    }
+
     @Test
     public void testDelDelegate() throws Exception {
-    	DelDelegate delDelegate = web3j.delDelegate("0x1529FA43D9F7FE958662F7200739CDC3EC2666C7","0xd833b6738285f4a50cf42cf1a40c4000256589d4", "0x3635c9adc5dea00000", null).send();
+    	DelDelegate delDelegate = web3j.delDelegate(config.validAccount(),config.validCandidate(), "0x3635c9adc5dea00000", null).send();
     	
     	assertFalse(delDelegate.getHash().isEmpty());
     }
     
     @Test
     public void testDelCancelDelegate() throws Exception {
-    	DelCancelDelegate delCancelDelegate = web3j.delCancelDelegate("0x1529FA43D9F7FE958662F7200739CDC3EC2666C7","0xd833b6738285f4a50cf42cf1a40c4000256589d4", "0x3635c9adc5dea00000", null).send();
+    	DelCancelDelegate delCancelDelegate = web3j.delCancelDelegate(config.validAccount(),config.validCandidate(), "0x3635c9adc5dea00000", null).send();
     	
     	assertFalse(delCancelDelegate.getHash().isEmpty());
     }
     
     @Test
     public void testDelApplyCandidate() throws Exception {
-    	DelApplyCandidate delApplyCandidate = web3j.delApplyCandidate("0xd833b6738285f4a50cf42cf1a40c4000256589d4","0x21e19e0c9bab2400000", 10, null).send();
+    	DelApplyCandidate delApplyCandidate = web3j.delApplyCandidate(config.validAccount(),"0x21e19e0c9bab2400000", 10, null).send();
     	
     	assertFalse(delApplyCandidate.getHash().isEmpty());
     }
 
     @Test
     public void testDelCancelCandidate() throws Exception {
-    	DelCancelCandidate delCancelCandidate = web3j.delCancelCandidate("0xd833b6738285f4a50cf42cf1a40c4000256589d4", null).send();
+    	DelCancelCandidate delCancelCandidate = web3j.delCancelCandidate(config.validAccount(), null).send();
     	
     	assertFalse(delCancelCandidate.getHash().isEmpty());
     }
 
     @Test
     public void testDelCheckCandidate() throws Exception {
-    	DelCheckCandidate delCheckCandidate = web3j.delCheckCandidate("0xd833b6738285f4a50cf42cf1a40c4000256589d4", new DefaultBlockParameterNumber(10)).send();
+    	DelCheckCandidate delCheckCandidate = web3j.delCheckCandidate(config.validAccount(), new DefaultBlockParameterNumber(10)).send();
     	
     	assertTrue(delCheckCandidate.getCandidateState().getCommission() >= 0);
     }
 
     @Test
-    public void testEthGetFullBalance() throws Exception {
-    	EthGetFullBalance ethGetFullBalance = web3j.ethGetFullBalance("0xC6179A651918888251380A4E3FEE6AF81CF091D1",DefaultBlockParameterName.LATEST, true).send();
-    	
-    	assertTrue(ethGetFullBalance.getFullBalance().getBalance().compareTo(BigInteger.ZERO) >= 0);
-    }
+    public void testDelExtractReward() throws Exception {
+        DelExtractReward delExtractReward = web3j.delExtractReward(config.validAccount(), null).send();
 
+        assertFalse(delExtractReward.getHash().isEmpty());
+    }
 }

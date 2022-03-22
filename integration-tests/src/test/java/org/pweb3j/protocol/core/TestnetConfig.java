@@ -39,7 +39,12 @@ public class TestnetConfig implements IntegrationTestConfig {
     @Override
     public String validAccount() {
         // https://testnet.etherscan.io/address/0xCB10FBad79F5e602699fFf2Bb4919Fbd87AbC8CC
-        return "0xcb10fbad79f5e602699fff2bb4919fbd87abc8cc";
+        return "0xb4998f06280ba324bd73710e170ee3084b4415fb";
+    }
+
+    @Override
+    public String validCandidate() {
+        return "0xd833b6738285f4a50cf42cf1a40c4000256589d4";
     }
 
     @Override
@@ -91,5 +96,10 @@ public class TestnetConfig implements IntegrationTestConfig {
                         new TypeReference<Uint>() {}));
 
         return EventEncoder.encode(event);
+    }
+
+    @Override
+    public String childChain() {
+        return "child_0";
     }
 }

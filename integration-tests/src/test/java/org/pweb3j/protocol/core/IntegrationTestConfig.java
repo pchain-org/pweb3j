@@ -19,6 +19,8 @@ public interface IntegrationTestConfig {
 
     String validAccount();
 
+    String validCandidate();
+
     String validContractAddress();
 
     String validContractAddressPositionZero();
@@ -34,4 +36,6 @@ public interface IntegrationTestConfig {
     BigInteger validUncleBlock();
 
     String encodedEvent();
+
+    String childChain();
 }

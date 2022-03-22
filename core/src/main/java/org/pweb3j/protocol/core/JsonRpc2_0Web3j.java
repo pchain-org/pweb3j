@@ -11,89 +11,20 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import io.reactivex.Flowable;
 
+import org.junit.Test;
 import org.pweb3j.protocol.Web3j;
 import org.pweb3j.protocol.Web3jService;
 import org.pweb3j.protocol.core.methods.request.ShhFilter;
 import org.pweb3j.protocol.core.methods.request.ShhPost;
 import org.pweb3j.protocol.core.methods.request.Transaction;
-import org.pweb3j.protocol.core.methods.response.ChainCreateChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainDepositInChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainDepositInMainChain;
-import org.pweb3j.protocol.core.methods.response.ChainGetAllChains;
-import org.pweb3j.protocol.core.methods.response.ChainGetBlockReward;
-import org.pweb3j.protocol.core.methods.response.ChainJoinChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainSetBlockReward;
-import org.pweb3j.protocol.core.methods.response.ChainSignAddress;
-import org.pweb3j.protocol.core.methods.response.ChainWithdrawFromChildChain;
-import org.pweb3j.protocol.core.methods.response.ChainWithdrawFromMainChain;
-import org.pweb3j.protocol.core.methods.response.DbGetHex;
-import org.pweb3j.protocol.core.methods.response.DbGetString;
-import org.pweb3j.protocol.core.methods.response.DbPutHex;
-import org.pweb3j.protocol.core.methods.response.DbPutString;
-import org.pweb3j.protocol.core.methods.response.DelApplyCandidate;
-import org.pweb3j.protocol.core.methods.response.DelCancelCandidate;
-import org.pweb3j.protocol.core.methods.response.DelCancelDelegate;
-import org.pweb3j.protocol.core.methods.response.DelCheckCandidate;
-import org.pweb3j.protocol.core.methods.response.DelDelegate;
-import org.pweb3j.protocol.core.methods.response.EthAccounts;
-import org.pweb3j.protocol.core.methods.response.EthBlock;
-import org.pweb3j.protocol.core.methods.response.EthBlockNumber;
-import org.pweb3j.protocol.core.methods.response.EthCoinbase;
-import org.pweb3j.protocol.core.methods.response.EthCompileLLL;
-import org.pweb3j.protocol.core.methods.response.EthCompileSerpent;
-import org.pweb3j.protocol.core.methods.response.EthCompileSolidity;
-import org.pweb3j.protocol.core.methods.response.EthEstimateGas;
-import org.pweb3j.protocol.core.methods.response.EthFilter;
-import org.pweb3j.protocol.core.methods.response.EthGasPrice;
-import org.pweb3j.protocol.core.methods.response.EthGetBalance;
-import org.pweb3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
-import org.pweb3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
-import org.pweb3j.protocol.core.methods.response.EthGetCode;
-import org.pweb3j.protocol.core.methods.response.EthGetCompilers;
-import org.pweb3j.protocol.core.methods.response.EthGetFullBalance;
-import org.pweb3j.protocol.core.methods.response.EthGetStorageAt;
-import org.pweb3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.pweb3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.pweb3j.protocol.core.methods.response.EthGetUncleCountByBlockHash;
-import org.pweb3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber;
-import org.pweb3j.protocol.core.methods.response.EthGetWork;
-import org.pweb3j.protocol.core.methods.response.EthHashrate;
-import org.pweb3j.protocol.core.methods.response.EthLog;
-import org.pweb3j.protocol.core.methods.response.EthMining;
-import org.pweb3j.protocol.core.methods.response.EthProtocolVersion;
-import org.pweb3j.protocol.core.methods.response.EthSign;
-import org.pweb3j.protocol.core.methods.response.EthSubmitHashrate;
-import org.pweb3j.protocol.core.methods.response.EthSubmitWork;
-import org.pweb3j.protocol.core.methods.response.EthSubscribe;
-import org.pweb3j.protocol.core.methods.response.EthSyncing;
-import org.pweb3j.protocol.core.methods.response.EthTransaction;
-import org.pweb3j.protocol.core.methods.response.EthUninstallFilter;
-import org.pweb3j.protocol.core.methods.response.Log;
-import org.pweb3j.protocol.core.methods.response.NetListening;
-import org.pweb3j.protocol.core.methods.response.NetPeerCount;
-import org.pweb3j.protocol.core.methods.response.NetVersion;
-import org.pweb3j.protocol.core.methods.response.ShhAddToGroup;
-import org.pweb3j.protocol.core.methods.response.ShhHasIdentity;
-import org.pweb3j.protocol.core.methods.response.ShhMessages;
-import org.pweb3j.protocol.core.methods.response.ShhNewFilter;
-import org.pweb3j.protocol.core.methods.response.ShhNewGroup;
-import org.pweb3j.protocol.core.methods.response.ShhNewIdentity;
-import org.pweb3j.protocol.core.methods.response.ShhUninstallFilter;
-import org.pweb3j.protocol.core.methods.response.ShhVersion;
-import org.pweb3j.protocol.core.methods.response.TdmGeneratePrivateValidator;
-import org.pweb3j.protocol.core.methods.response.TdmGetCurrentEpochNumber;
-import org.pweb3j.protocol.core.methods.response.TdmGetEpoch;
-import org.pweb3j.protocol.core.methods.response.TdmGetNextEpochValidators;
-import org.pweb3j.protocol.core.methods.response.TdmGetNextEpochVote;
-import org.pweb3j.protocol.core.methods.response.TdmRevealVote;
-import org.pweb3j.protocol.core.methods.response.TdmVoteNextEpoch;
-import org.pweb3j.protocol.core.methods.response.Web3ClientVersion;
-import org.pweb3j.protocol.core.methods.response.Web3Sha3;
+import org.pweb3j.protocol.core.methods.response.*;
 import org.pweb3j.protocol.rx.JsonRpc2_0Rx;
 import org.pweb3j.protocol.websocket.events.LogNotification;
 import org.pweb3j.protocol.websocket.events.NewHeadsNotification;
 import org.pweb3j.utils.Async;
 import org.pweb3j.utils.Numeric;
+
+import static junit.framework.TestCase.assertFalse;
 
 /**
  * JSON-RPC 2.0 factory implementation.
@@ -590,6 +521,26 @@ public class JsonRpc2_0Web3j implements Web3j {
     }
 
     @Override
+    public Request<?, EthGetFullBalance> ethGetFullBalance(String from,
+                                                           DefaultBlockParameter blockNumber, boolean fullDetail) {
+
+        return new Request<>(
+                "eth_getFullBalance",
+                Arrays.asList(from, blockNumber.getValue(), fullDetail),
+                web3jService,
+                EthGetFullBalance.class);
+    }
+
+    @Override
+    public Request<?, EthChainId> ethChainId() {
+        return new Request<>(
+                "eth_chainId",
+                Collections.<String>emptyList(),
+                web3jService,
+                EthChainId.class);
+    }
+
+    @Override
     public Request<?, DbPutString> dbPutString(
             String databaseName, String keyName, String stringToStore) {
         return new Request<>(
@@ -1051,10 +1002,28 @@ public class JsonRpc2_0Web3j implements Web3j {
 	public Request<?, TdmGetEpoch> tdmGetEpoch(int number) {
 		return new Request<>(
                 "tdm_getEpoch",
-                Arrays.asList(number),
+                Arrays.asList(String.format("0x%x", number)),
                 web3jService,
                 TdmGetEpoch.class);
 	}
+
+    @Override
+    public Request<?, TdmGetCurrentEpochNumber> tdmGetCurrentEpochNumberOfChildChain(String chainId) {
+        return new Request<>(
+                "tdm_getCurrentEpochNumberOfChildChain",
+                Arrays.asList(chainId),
+                web3jService,
+                TdmGetCurrentEpochNumber.class);
+    }
+
+    @Override
+    public Request<?, TdmGetEpoch> tdmGetEpochOfChildChain(String chainId, int number) {
+        return new Request<>(
+                "tdm_getEpochOfChildChain",
+                Arrays.asList(chainId, String.format("0x%x", number)),
+                web3jService,
+                TdmGetEpoch.class);
+    }
     
     @Override
     public Request<?, TdmGetNextEpochVote> tdmGetNextEpochVote() {
@@ -1081,6 +1050,15 @@ public class JsonRpc2_0Web3j implements Web3j {
                 Arrays.asList(address),
                 web3jService,
                 TdmGeneratePrivateValidator.class);
+    }
+
+    @Override
+    public Request<?, TdmPeers> tdmPeers() {
+        return new Request<>(
+                "tdm_peers",
+                Collections.<String>emptyList(),
+                web3jService,
+                TdmPeers.class);
     }
     
     @Override
@@ -1167,15 +1145,23 @@ public class JsonRpc2_0Web3j implements Web3j {
                 web3jService,
                 DelCheckCandidate.class);
     }
-    
+
     @Override
-    public Request<?, EthGetFullBalance> ethGetFullBalance(String from, 
-    		DefaultBlockParameter blockNumber, boolean fullDetail) {
-    	
-    	return new Request<>(
-                "eth_getFullBalance",
-                Arrays.asList(from, blockNumber.getValue(), fullDetail),
+    public Request<?, DelExtractReward> delExtractReward(String from, String gasPrice) {
+
+        List<String> params = null;
+
+        if (gasPrice != null && !gasPrice.isEmpty()) {
+            params = Arrays.asList(from, gasPrice);
+        } else {
+            params = Arrays.asList(from);
+        }
+
+        return new Request<>(
+                "del_extractReward",
+                params,
                 web3jService,
-                EthGetFullBalance.class);
+                DelExtractReward.class);
     }
+
 }

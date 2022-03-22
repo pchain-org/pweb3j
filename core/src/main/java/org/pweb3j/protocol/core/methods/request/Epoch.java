@@ -1,21 +1,33 @@
 package org.pweb3j.protocol.core.methods.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.math.BigInteger;
 import java.util.List;
 
 public class Epoch {
 
-	int number; //0,
+	@JsonDeserialize(using = IntegerDeserializer.class)
+	Integer number; //0,
+	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger reward_per_block; //1841338734567901234,
+	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger start_block; //0,
+	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger end_block; //2592000,
 	String start_time; //"2018-09-30T16:20:07.02+08:00",
 	String end_time; //"0001-01-01T00:00:00Z",
+	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger vote_start_block; //1944000,
+	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger vote_end_block; //2203199,
+	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger reveal_start_block; //2203200,
+	@JsonDeserialize(using = BigIntegerDeserializer.class)
 	BigInteger reveal_end_block; //2462400,
-	int status; 
+	@JsonDeserialize(using = IntegerDeserializer.class)
+	Integer status;
 	List<EpochValidator> validators;
 	public int getNumber() {
 		return number;
