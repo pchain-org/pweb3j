@@ -44,3 +44,9 @@ To use an RxJava Flowable:
 All tests/examples can be found in https://github.com/pchain-org/pweb3j/tree/master/integration-tests
 
 More guides and instructions could refer to https://github.com/web3j/web3j
+
+# about this branch: develop
+
+This branch is for development based on branch 'master'. 
+
+The tasks put in this branch should be relatively small which could apply to branch 'master' quickly. Large/complex features should consider forking a new branch.
